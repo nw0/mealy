@@ -1,0 +1,71 @@
+{% extends "mealy/base.html" %}
+{% load mathfilters %}
+
+{% block content %}
+<div class="eight columns">
+  <h4>Meal list</h4>
+  {% if meal_list %}
+  <table class="u-full-width">
+    <thead>
+      <tr>
+        <th>Mon</th>
+        <th>Tue</th>
+        <th>Wed</th>
+        <th>Thu</th>
+        <th>Fri</th>
+        <th>Sat</th>
+        <th>Sun</th>
+        <th>Summary</th>
+    </thead>
+    <tbody>
+      {% for mealwk in cal_meals %}
+      <tr class="meal-cell-head">
+        {% for mealday in mealwk.1 %}
+        <td class="cell-head">{{ mealday.0 }}</td>
+        {% endfor %}
+      </tr>
+      <tr class="meal-cell-foot">
+        {% for mealday in mealwk.1 %}
+          <td>{% for line in mealday.1 %}{% if line.1 %}<a href="{{line.1}}">{% endif %}{{ line.0 }}{% if line.1 %}</a>{% endif %}<br>{% endfor %}</td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <table class="u-full-width">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Meal</th>
+        <th>Cost (£)</th>
+    </thead>
+    <tbody>
+      {% for meal in meal_list %}
+      <tr>
+        <td>{{ meal.cons_time|date:"D dS M Y" }}</td>
+        <td><a href="{% url 'mealy:meal_detail' meal.id %}">{{ meal.meal_type }}</a></td>
+        <td>{{ meal.meal_cost|div:100|floatformat:2 }}{% if meal.dish_deps %} ({{ meal.dish_deps }}*){% endif %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No meals.</p>
+  {% endif %}
+</div>
+
+<div class="four columns">
+  <h4>Add a meal</h4>
+  {% if error_message %}
+  <p><strong>{{ error_message }}</strong></p>
+  {% endif %}
+
+  <form action="{% url 'mealy:meal_new' %}" method="post">
+    {% csrf_token %}
+    {{ meal_form.as_p }}
+    <br />
+    <input type="submit" />
+  </form>
+</div>
+{% endblock content %}

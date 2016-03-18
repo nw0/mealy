@@ -1,0 +1,54 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="Meal Manager:">
+  <meta name="keywords" content="">
+  <meta name="author" content="Nicholas Sim">
+  <title>Mealy</title>
+  <link href="{% static 'mealy/style.css' %}" rel="stylesheet">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+  <link href="{% static 'skeleton/normalize.css' %}" rel="stylesheet">
+  <link href="{% static 'skeleton/skeleton.css' %}" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="one-half column">
+        <h1>Mealy</h1>
+        <p>Welcome to mealy, <em>{{user}}</em>.</p>
+        <p><a href="{% url 'mealy:index' %}">Main</a> <a href="{% url 'mealy:inventory' %}">Inventory</a></p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="eight columns">
+        <p>{{ dish.cooking_style }}, part of <a href="{% url 'mealy:meal_detail' dish.par_meal.id %}">{{ dish.par_meal }}</a></p>
+
+        {% if tickets %}
+        <p>It has the following tickets allocated to it:</p>
+        <ol>
+          {% for ticket in tickets %}
+          <li>Ticket for {{ ticket.used_on_ticket }} of {{ ticket.resource_inst }} costing {{ ticket.ticket_cost }}</li>
+          {% endfor %}
+        </ol>
+        {% else %}
+        <p>There are no tickets associated with this meal.</p>
+        {% endif %}
+      </div>
+      <div class="four columns">
+        <h4>Add ticket</h4>
+        <form action="{% url 'mealy:dish_detail' dish.id %}" method="post">
+          {% csrf_token %}
+          {{ ticket_form.as_p }}
+          <input type="submit" />
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="Meal Manager:">
+  <meta name="keywords" content="">
+  <meta name="author" content="Nicholas Sim">
+  <title>Mealy</title>
+  <link href="{% static 'mealy/style.css' %}" rel="stylesheet">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+  <link href="{% static 'skeleton/normalize.css' %}" rel="stylesheet">
+  <link href="{% static 'skeleton/skeleton.css' %}" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="one-half column">
+        <h1>Mealy</h1>
+        <p>Welcome to mealy, <em>{{user}}</em>.</p>
+        <p><a href="{% url 'mealy:index' %}">Main</a>
+          <a href="{% url 'mealy:inventory' %}">Inventory</a></p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="eight columns">
+          <h4>{{ meal.cons_time }}</h4>
+          <p>This is a {{meal.meal_type}} you ate on {{meal.cons_time}}, costing {{meal.meal_cost}} with {{meal.dish_deps}} unresolved items.</p>
+          {% if dishes %}
+          <p>It has these dishes:</p>
+          <ol>
+            {% for dish in dishes %}
+            <li><a href="{% url 'mealy:dish_detail' dish.id %}">{{ dish.cooking_style }}</a> with {{ dish.open_cost }} open and {{dish.ticket_deps}} deps</li>
+            {% endfor %}
+          </ol>
+          {% else %}
+          <p>No dishes</p>
+          {% endif %}
+        </div>
+        <div class="four columns">
+          <h4>Add dish</h4>
+          <form action="{% url 'mealy:add_dish' meal.id %}" method="post">
+            {% csrf_token %}
+            {{ dish_form.as_p }}
+            <input type="submit" />
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </body>
+  </html>
