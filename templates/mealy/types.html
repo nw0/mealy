@@ -1,41 +1,19 @@
-{% load staticfiles %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="description" content="Meal Manager:">
-  <meta name="keywords" content="">
-  <meta name="author" content="Nicholas Sim">
-  <title>Mealy</title>
-  <link href="{% static 'mealy/style.css' %}" rel="stylesheet">
+{% extends "mealy/base.html" %}
+{% load mathfilters %}
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
-  <link href="{% static 'skeleton/normalize.css' %}" rel="stylesheet">
-  <link href="{% static 'skeleton/skeleton.css' %}" rel="stylesheet">
-</head>
+{% block links %}
+<a href="{% url 'mealy:index' %}">Main</a>
+<a href="{% url 'mealy:inventory' %}">Inventory</a>
+{% endblock links %}
 
-<body>
-  <div class="container">
-    <div class="row">
-      <div class="one-half column">
-        <h1>Mealy</h1>
-        <p>Welcome to mealy, <em>{{user}}</em>.</p>
-        <p><a href="{% url 'mealy:index' %}">Main</a> <a href="{% url 'mealy:inventory' %}">Inventory</a></p>
-      </div>
-    </div>
-
-    <div class="row">
-      {% if type_list %}
-      <ul>
-        {% for tp in type_list %}
-        <li><a href="{% url 'mealy:types_detail' tp.r_name %}">{{ tp.r_name }}</a></li>
-        {% endfor %}
-      </ul>
-      {% else %}
-      <p>No resource types exist.</p>
-      {% endif %}
-    </div>
-  </div>
-</body>
-</html>
+{% block content %}
+{% if type_list %}
+<ul>
+  {% for tp in type_list %}
+  <li><a href="{% url 'mealy:types_detail' tp.r_name %}">{{ tp.r_name }}</a></li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No resource types exist.</p>
+{% endif %}
+{% endblock content %}
