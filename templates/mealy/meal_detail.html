@@ -10,7 +10,10 @@
 <div class="eight columns">
   <h4>{{ meal.cons_time }}</h4>
   <p>This is a {{meal.meal_type}} you ate on {{meal.cons_time}},
-    costing {{meal.meal_cost}} with {{meal.dish_deps}} unresolved items.</p>
+    costing {% if meal.meal_cost < 0.5 %}nothing{% elif meal.meal_cost < 100 %}
+    {{ meal.meal_cost|floatformat:"0" }}p{% else %}
+    £{{ meal.meal_cost|div:100|floatformat:2 }}{% endif %}
+    with {{meal.dish_deps}} unresolved items.</p>
   {% if dishes %}
   <p>It has these dishes:</p>
   <ol>
