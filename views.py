@@ -6,18 +6,21 @@ from django.core.urlresolvers import reverse
 from .forms import MealForm, DishForm, TicketForm, TicketFormSet
 import json, datetime, time
 
-from .models import Resource_Type, Resource_Inst, Resource_Ticket, TicketManager, Meal, Dish
+from .models import Resource_Type, Resource_Inst, Resource_Ticket, \
+                TicketManager, Meal, Dish
 # Create your views here.
 
 def iso_to_gregorian(iso_year, iso_week, iso_day):
     "Gregorian calendar date for the given ISO year, week and day"
     fifth_jan = datetime.date(iso_year, 1, 5)
     _, fifth_jan_week, fifth_jan_day = fifth_jan.isocalendar()
-    return fifth_jan + datetime.timedelta(days=iso_day-fifth_jan_day, weeks=iso_week-fifth_jan_week)
+    return fifth_jan + datetime.timedelta(days=iso_day-fifth_jan_day,
+                                            weeks=iso_week-fifth_jan_week)
 
 def index(request):
     #   We want to know what meals there are
-    meal_list = Meal.objects.filter(meal_owner=request.user.id).order_by('-cons_time')
+    meal_list = Meal.objects.filter(
+                        meal_owner=request.user.id).order_by('-cons_time')
     cal = {}
     for meal in meal_list:
         iy, im, iw = meal.cons_time.isocalendar()
@@ -37,10 +40,15 @@ def index(request):
             for meal in weekMeals[w]:
                 tot += meal.meal_cost
                 mc += 1
-            weekMeals[w] = [ (u"%s \xA3%.2f" % (meal.meal_type[0], meal.meal_cost/100), reverse("mealy:meal_detail", args=(meal.id,))) for meal in weekMeals[w]]
-            weekMeals[w] = [iso_to_gregorian(e[0], e[1], w+1).strftime("%b %d"), weekMeals[w]]
+            weekMeals[w] = [ (u"%s \xA3%.2f" % (meal.meal_type[0],
+                                meal.meal_cost/100),
+                                reverse("mealy:meal_detail", args=(meal.id,)))
+                                for meal in weekMeals[w]]
+            weekMeals[w] = [iso_to_gregorian(e[0], e[1], w+1).strftime("%b %d"),
+                                weekMeals[w]]
             weekMeals[w][1].sort()
-        weekMeals.append(["", [(u"T \xA3%.2f" % (tot/100), ), (u"A \xA3%.2f" % (tot/100/mc), )]])
+        weekMeals.append(["", [(u"T \xA3%.2f" % (tot/100), ),
+                            (u"A \xA3%.2f" % (tot/100/mc), )]])
         cal[e] = weekMeals
     cal = sorted(list(cal.items()), reverse=True)
 
@@ -81,7 +89,8 @@ def add_dish(request, meal_id):
     if request.method == "POST":
         nd = Dish(cooking_style=request.POST['dish_style'], par_meal=meal)
         nd.save()
-        return HttpResponseRedirect(reverse("mealy:meal_detail", args=[meal_id]))
+        return HttpResponseRedirect(
+                        reverse("mealy:meal_detail", args=[meal_id]))
     else:
         template    = loader.get_template("mealy/add_dish.html")
         contDict     = { 'meal': meal, 'dish_form': DishForm }
@@ -94,12 +103,16 @@ def dish_detail(request, dish_id):
         raise Http404("Dish does not exist")
 
     if request.method == "POST":
-        res_inst = Resource_Inst.objects.get(id=request.POST['resource_inst'], inst_owner=request.user)
+        res_inst = Resource_Inst.objects.get(id=request.POST['resource_inst'],
+                                                inst_owner=request.user)
         uu = float(request.POST['units_used'])
-        exhausted = 'exhausted' in request.POST and request.POST['exhausted'] == 'on'
+        exhausted = ('exhausted' in request.POST) and \
+                    (request.POST['exhausted'] == 'on')
 
-        nt = Resource_Ticket.objects.create_ticket(res_inst, uu, dish, exhausted)
-        return HttpResponseRedirect(reverse("mealy:dish_detail", args=[dish.id]))
+        nt = Resource_Ticket.objects.create_ticket(
+                        res_inst, uu, dish, exhausted)
+        return HttpResponseRedirect(
+                        reverse("mealy:dish_detail", args=[dish.id]))
 
     tickets = Resource_Ticket.objects.filter(par_dish=dish)
     contDict    = { 'dish': dish, 'ticket_form': TicketForm }

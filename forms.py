@@ -24,7 +24,9 @@ class DishForm(forms.Form):
     dish_style.widget.attrs.update({'autofocus': 'autofocus'})
 
 class TicketForm(forms.Form):
-    resource_inst   = forms.ModelChoiceField(queryset=Resource_Inst.objects.filter(exhausted=False).order_by('id'))
+    resource_inst   = forms.ModelChoiceField(
+                            queryset = Resource_Inst.objects.filter(
+                                        exhausted = False).order_by('id'))
     resource_inst.widget.attrs.update({'autofocus': 'autofocus'})
     units_used      = forms.FloatField()
     exhausted       = forms.BooleanField()
