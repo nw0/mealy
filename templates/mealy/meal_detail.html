@@ -17,8 +17,9 @@
   <ol>
     {% for dish in dishes %}
     <li><a href="{% url 'mealy:dish_detail' dish.id %}">
-      {{ dish.cooking_style }}</a> with {{ dish.open_cost }} open and
-      {{dish.ticket_deps}} deps</li>
+      {{ dish.cooking_style }}</a> at
+      {{ dish.get_closed_cost|price:dish.open_cost }} (closed + open) with
+      {{dish.ticket_deps}} open tickets</li>
     {% endfor %}
   </ol>
   {% else %}
