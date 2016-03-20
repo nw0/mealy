@@ -125,6 +125,14 @@ class Dish(models.Model):
         if self.ticket_deps <= 0:
             self.par_meal.close_dep()
 
+    def get_closed_cost(self):
+        tickets = Resource_Ticket.objects.filter(par_dish=self, finalised=True)
+        return sum([ ticket.ticket_cost for ticket in tickets ])
+
+    def get_open_cost(self):
+        tickets = Resource_Ticket.objects.filter(par_dish=self, finalised=False)
+        return sum([ ticket.ticket_cost for ticket in tickets ])
+
     def __str__(self):
         return self.cooking_style
 
