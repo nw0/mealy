@@ -10,7 +10,8 @@
   <link href="{% static 'mealy/style.css' %}" rel="stylesheet">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600"
+    rel="stylesheet" type="text/css">
   <link href="{% static 'skeleton/normalize.css' %}" rel="stylesheet">
   <link href="{% static 'skeleton/skeleton.css' %}" rel="stylesheet">
 </head>
@@ -21,7 +22,9 @@
       <div class="one-half column">
         <h1>Mealy</h1>
         <p>Welcome to mealy, <em>{{user}}</em>.</p>
-        <p>{% block links %}<a href="{% url 'mealy:inventory' %}">Inventory</a>{% endblock links %}</p>
+        <p>{% block links %}
+          <a href="{% url 'mealy:inventory' %}">Inventory</a>
+          {% endblock links %}</p>
       </div>
     </div>
 

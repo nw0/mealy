@@ -10,7 +10,8 @@
 {% if type_list %}
 <ul>
   {% for tp in type_list %}
-  <li><a href="{% url 'mealy:types_detail' tp.r_name %}">{{ tp.r_name }}</a></li>
+  <li><a href="{% url 'mealy:types_detail' tp.r_name %}">
+    {{ tp.r_name }}</a></li>
   {% endfor %}
 </ul>
 {% else %}

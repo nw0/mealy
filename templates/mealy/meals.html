@@ -26,7 +26,10 @@
       </tr>
       <tr class="meal-cell-foot">
         {% for mealday in mealwk.1 %}
-          <td>{% for line in mealday.1 %}{% if line.1 %}<a href="{{line.1}}">{% endif %}{{ line.0 }}{% if line.1 %}</a>{% endif %}<br>{% endfor %}</td>
+          <td>{% for line in mealday.1 %}
+            {% if line.1 %}<a href="{{line.1}}">{% endif %}
+              {{ line.0 }}
+              {% if line.1 %}</a>{% endif %}<br>{% endfor %}</td>
         {% endfor %}
       </tr>
       {% endfor %}
@@ -44,8 +47,10 @@
       {% for meal in meal_list %}
       <tr>
         <td>{{ meal.cons_time|date:"D dS M Y" }}</td>
-        <td><a href="{% url 'mealy:meal_detail' meal.id %}">{{ meal.meal_type }}</a></td>
-        <td>{{ meal.meal_cost|div:100|floatformat:2 }}{% if meal.dish_deps %} ({{ meal.dish_deps }}*){% endif %}</td>
+        <td><a href="{% url 'mealy:meal_detail' meal.id %}">
+          {{ meal.meal_type }}</a></td>
+        <td>{{ meal.meal_cost|div:100|floatformat:2 }}
+          {% if meal.dish_deps %} ({{ meal.dish_deps }}*){% endif %}</td>
       </tr>
       {% endfor %}
     </tbody>

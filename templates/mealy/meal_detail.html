@@ -9,12 +9,15 @@
 {% block content %}
 <div class="eight columns">
   <h4>{{ meal.cons_time }}</h4>
-  <p>This is a {{meal.meal_type}} you ate on {{meal.cons_time}}, costing {{meal.meal_cost}} with {{meal.dish_deps}} unresolved items.</p>
+  <p>This is a {{meal.meal_type}} you ate on {{meal.cons_time}},
+    costing {{meal.meal_cost}} with {{meal.dish_deps}} unresolved items.</p>
   {% if dishes %}
   <p>It has these dishes:</p>
   <ol>
     {% for dish in dishes %}
-    <li><a href="{% url 'mealy:dish_detail' dish.id %}">{{ dish.cooking_style }}</a> with {{ dish.open_cost }} open and {{dish.ticket_deps}} deps</li>
+    <li><a href="{% url 'mealy:dish_detail' dish.id %}">
+      {{ dish.cooking_style }}</a> with {{ dish.open_cost }} open and
+      {{dish.ticket_deps}} deps</li>
     {% endfor %}
   </ol>
   {% else %}

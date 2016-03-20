@@ -7,11 +7,14 @@
 {% endblock links %}
 
 {% block content %}
-<p>This is the {{res_name}} category. {% if par %}Its parent is <a href="{% url 'mealy:types_detail' par.r_name %}">{{ par.r_name }}</a> and these{% else %}These{% endif %} are its children:</p>
+<p>This is the {{res_name}} category. {% if par %}Its parent is
+  <a href="{% url 'mealy:types_detail' par.r_name %}">{{ par.r_name }}</a> and
+  these{% else %}These{% endif %} are its children:</p>
 {% if type_list %}
 <ul>
   {% for tp in type_list %}
-  <li><a href="{% url 'mealy:types_detail' tp.r_name %}">{{ tp.r_name }}</a></li>
+  <li><a href="{% url 'mealy:types_detail' tp.r_name %}">
+    {{ tp.r_name }}</a></li>
   {% endfor %}
 </ul>
 {% else %}

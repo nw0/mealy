@@ -8,5 +8,9 @@
 
 {% block content %}
 <h4>{{ inst.res_name }}</h4>
-This is a <a href="{% url 'mealy:types_detail' inst.res_type.r_name %}">{{inst.res_type.r_name}}</a>, originally {{inst.amt_original}} {{inst.units_original}} and purchased at {{inst.price}}p on {{inst.purchase_date}}. We have currently used {{inst.used_so_far}} units, and the best before date is {{inst.best_bef_date}}.
+This is a <a href="{% url 'mealy:types_detail' inst.res_type.r_name %}">
+  {{inst.res_type.r_name}}</a>, originally {{inst.amt_original}}
+  {{inst.units_original}} and purchased at {{inst.price}}p on
+  {{inst.purchase_date}}. We have currently used {{inst.used_so_far}} units,
+  and the best before date is {{inst.best_bef_date}}.
 {% endblock %}

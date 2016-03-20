@@ -8,13 +8,19 @@
 
 {% block content %}
 <div class="eight columns">
-  <p>{{ dish.cooking_style }}, part of <a href="{% url 'mealy:meal_detail' dish.par_meal.id %}">{{ dish.par_meal }}</a></p>
+  <p>{{ dish.cooking_style }}, part of
+    <a href="{% url 'mealy:meal_detail' dish.par_meal.id %}">
+      {{ dish.par_meal }}</a></p>
 
   {% if tickets %}
   <p>It has the following tickets allocated to it:</p>
   <ol>
     {% for ticket in tickets %}
-    <li>Ticket for {{ ticket.used_on_ticket }} of {{ ticket.resource_inst.res_name }} <a href="{% url 'mealy:inv_detail' ticket.resource_inst.id %}">({{ ticket.resource_inst.id }})</a> costing {{ ticket.ticket_cost }}</li>
+    <li>Ticket for {{ ticket.used_on_ticket }} of
+      {{ ticket.resource_inst.res_name }}
+      <a href="{% url 'mealy:inv_detail' ticket.resource_inst.id %}">
+        ({{ ticket.resource_inst.id }})</a>
+        costing {{ ticket.ticket_cost }}</li>
     {% endfor %}
   </ol>
   {% else %}
