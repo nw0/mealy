@@ -86,7 +86,7 @@ class Meal(models.Model):
         self.save()
 
     def __str__(self):
-        return self.meal_type + " on " + str(self.cons_time)
+        return self.meal_type + " on " + self.cons_time.strftime("%B %-d, %Y")
 
 class Dish(models.Model):
     COOKING_STYLES = (
