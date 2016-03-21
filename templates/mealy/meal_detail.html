@@ -9,9 +9,9 @@
 
 {% block content %}
 <div class="eight columns">
-  <h4>{{ meal.cons_time }}</h4>
-  <p>This is a {{meal.meal_type}} you ate on {{meal.cons_time}}, costing
-    {{ meal.meal_cost|price }} with {{meal.dish_deps}} unresolved items.</p>
+  <h4>{{ meal }}</h4>
+  <p>This meal cost {{ meal.meal_cost|price }} with
+    {{meal.dish_deps}} unresolved items.</p>
   {% if dishes %}
   <p>It has these dishes:</p>
   <ol>
