@@ -21,8 +21,9 @@
     <li>Ticket for {{ ticket.used_on_ticket }} of
       {{ ticket.resource_inst.res_name }}
       <a href="{% url 'mealy:inv_detail' ticket.resource_inst.id %}">
-        ({{ ticket.resource_inst.id }})</a>
-        costing {{ ticket.ticket_cost|price }}</li>
+        ({{ ticket.resource_inst.id }})</a> costing
+        {{ ticket.ticket_cost|price }}{% if not ticket.finalised %}*{% endif %}
+      </li>
     {% endfor %}
   </ol>
   {% else %}
