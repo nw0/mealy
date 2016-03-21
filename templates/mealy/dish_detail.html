@@ -1,5 +1,6 @@
 {% extends "mealy/base.html" %}
 {% load mathfilters %}
+{% load mealy_extras %}
 
 {% block links %}
 <a href="{% url 'mealy:index' %}">Main</a>
@@ -8,7 +9,8 @@
 
 {% block content %}
 <div class="eight columns">
-  <p>{{ dish.cooking_style }}, part of
+  <p>{{ dish.cooking_style }} @
+    {{ dish.get_closed_cost|price:dish.get_open_cost}}, part of
     <a href="{% url 'mealy:meal_detail' dish.par_meal.id %}">
       {{ dish.par_meal }}</a></p>
 
@@ -20,7 +22,7 @@
       {{ ticket.resource_inst.res_name }}
       <a href="{% url 'mealy:inv_detail' ticket.resource_inst.id %}">
         ({{ ticket.resource_inst.id }})</a>
-        costing {{ ticket.ticket_cost }}</li>
+        costing {{ ticket.ticket_cost|price }}</li>
     {% endfor %}
   </ol>
   {% else %}
