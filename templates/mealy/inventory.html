@@ -15,8 +15,8 @@
     <p>We have the following items in our inventory:</p>
     <ol>
       {% for item in items %}
-      <li>(<a href="{% url 'mealy:types_detail' item.res_type.r_name %}">
-        {{item.res_type.r_name}}</a>) <em>
+      <li>(<a href="{% url 'mealy:types_detail' item.res_type.r_name %}"
+        >{{item.res_type.r_name}}</a>) <em>
           <a href="{% url 'mealy:inv_detail' item.id %}">
             {{item.res_name}}</a></em> purchased at {{item.price}}p</li>
       {% endfor %}
