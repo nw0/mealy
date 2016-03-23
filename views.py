@@ -66,7 +66,7 @@ def meal_detail(request, meal_id):
     except Meal.DoesNotExist:
         raise Http404("Meal does not exist")
 
-    dishes      = Dish.objects.filter(par_meal=meal)
+    dishes      = Dish.objects.filter(par_meal=meal).order_by('id')
     template    = loader.get_template("mealy/meal_detail.html")
     contDict    = { 'meal': meal, 'dishes': dishes, 'dish_form': DishForm }
     return HttpResponse(template.render(contDict, request))
@@ -114,7 +114,7 @@ def dish_detail(request, dish_id):
         return HttpResponseRedirect(
                         reverse("mealy:dish_detail", args=[dish.id]))
 
-    tickets = Resource_Ticket.objects.filter(par_dish=dish)
+    tickets = Resource_Ticket.objects.filter(par_dish=dish).order_by('id')
     contDict    = { 'dish': dish, 'ticket_form': TicketForm }
     if len(tickets):
         contDict['tickets'] = tickets
