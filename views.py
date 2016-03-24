@@ -17,6 +17,7 @@ def iso_to_gregorian(iso_year, iso_week, iso_day):
     return fifth_jan + datetime.timedelta(days=iso_day-fifth_jan_day,
                                             weeks=iso_week-fifth_jan_week)
 
+@login_required
 def index(request):
     #   We want to know what meals there are
     meal_list = Meal.objects.filter(
@@ -60,6 +61,7 @@ def index(request):
                     'cal_meals': cal }
     return HttpResponse(template.render(contDict, request))
 
+@login_required
 def meal_detail(request, meal_id):
     try:
         meal = Meal.objects.get(id=meal_id, meal_owner=request.user)
@@ -71,6 +73,7 @@ def meal_detail(request, meal_id):
     contDict    = { 'meal': meal, 'dishes': dishes, 'dish_form': DishForm }
     return HttpResponse(template.render(contDict, request))
 
+@login_required
 def meal_new(request):
     nm = Meal(
         meal_type   = request.POST["meal_type"],
@@ -80,6 +83,7 @@ def meal_new(request):
     nm.save()
     return HttpResponseRedirect(reverse("mealy:index"))
 
+@login_required
 def add_dish(request, meal_id):
     try:
         meal = Meal.objects.get(id=meal_id, meal_owner=request.user)
@@ -96,6 +100,7 @@ def add_dish(request, meal_id):
         contDict     = { 'meal': meal, 'dish_form': DishForm }
         return HttpResponse(template.render(contDict, request))
 
+@login_required
 def dish_detail(request, dish_id):
     try:
         dish = Dish.objects.get(id=dish_id, par_meal__meal_owner=request.user)
@@ -121,6 +126,7 @@ def dish_detail(request, dish_id):
     template    = loader.get_template("mealy/dish_detail.html")
     return HttpResponse(template.render(contDict, request))
 
+@login_required
 def types(request):
     type_list = Resource_Type.objects.order_by('r_parent')
     #output = ', '.join([t.r_name for t in type_list])
@@ -128,6 +134,7 @@ def types(request):
     contDict = { 'type_list': type_list }
     return HttpResponse(template.render(contDict, request))
 
+@login_required
 def types_detail(request, res_name):
     try:
         ex_type = Resource_Type.objects.get(r_name=res_name)
@@ -142,6 +149,7 @@ def types_detail(request, res_name):
                 }
     return HttpResponse(template.render(contDict, request))
 
+@login_required
 def invent(request):
     inv = Resource_Inst.objects.filter(inst_owner=request.user.id, exhausted=False).order_by('res_type', 'purchase_date')
     template = loader.get_template("mealy/inventory.html")
@@ -150,6 +158,7 @@ def invent(request):
                 }
     return HttpResponse(template.render(contDict, request))
 
+@login_required
 def invent_detail(request, inst_id):
     try:
         inst = Resource_Inst.objects.get(id=inst_id, inst_owner=request.user)
@@ -160,6 +169,7 @@ def invent_detail(request, inst_id):
     contDict = { 'inst': inst }
     return HttpResponse(template.render(contDict, request))
 
+@login_required
 def invent_new_item(request):
     #   Add a new object
     ni = Resource_Inst(
