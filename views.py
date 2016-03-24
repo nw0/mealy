@@ -37,12 +37,13 @@ def index(request):
         #   e is a week, e.g. (2016, 1)
         #   cal[e] is a dict of meals by day {iw: [meal]} that week
         weekMeals = [[] for i in range(7)]
-        tot, mc = 0, 0
+        tot, mc, opensum = 0, 0, 0
         for w in xrange(7):
             weekMeals[w] = cal[e][w+1] if w+1 in cal[e] else []
             for meal in weekMeals[w]:
                 tot += meal.meal_cost
                 mc += 1
+                opensum += meal.open_cost
             weekMeals[w] = [ (u"%s \xA3%.2f" % (meal.meal_type[0],
                                 meal.meal_cost/100),
                                 reverse("mealy:meal_detail", args=(meal.id,)),
@@ -53,8 +54,10 @@ def index(request):
                                 weekMeals[w]]
             # weekMeals[0] = [ "Mar 14", [ ("L...", det_link, T), ... ] ]
             weekMeals[w][1].sort()
-        weekMeals.append(["", [(u"T \xA3%.2f" % (tot/100), False, ),
-                            (u"A \xA3%.2f" % (tot/100/mc), False, )]])
+        weekMeals.append(["", [(u"T \xA3%.2f (%.2f)" % (tot/100, opensum/100),
+                                    False, ),
+                            (u"A \xA3%.2f (%.2f)" %
+                                    (tot/100/mc, opensum/100/mc), False, )]])
         cal[e] = weekMeals
     cal = sorted(list(cal.items()), reverse=True)
 
