@@ -28,7 +28,7 @@
         {% for mealday in mealwk.1 %}
           <td>{% for line in mealday.1 %}
             {% if line.1 %}<a href="{{line.1}}">{% endif %}
-              {{ line.0 }}
+              {{ line.0 }}{% if line.2 %}*{% endif %}
               {% if line.1 %}</a>{% endif %}<br>{% endfor %}</td>
         {% endfor %}
       </tr>

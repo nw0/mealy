@@ -10,6 +10,8 @@ from .models import Resource_Type, Resource_Inst, Resource_Ticket, \
                 TicketManager, Meal, Dish
 # Create your views here.
 
+SEMI_OPEN_STATE_THRESHOLD = 10
+
 def iso_to_gregorian(iso_year, iso_week, iso_day):
     "Gregorian calendar date for the given ISO year, week and day"
     fifth_jan = datetime.date(iso_year, 1, 5)
@@ -43,15 +45,16 @@ def index(request):
                 mc += 1
             weekMeals[w] = [ (u"%s \xA3%.2f" % (meal.meal_type[0],
                                 meal.meal_cost/100),
-                                reverse("mealy:meal_detail", args=(meal.id,)))
+                                reverse("mealy:meal_detail", args=(meal.id,)),
+                                meal.open_cost > SEMI_OPEN_STATE_THRESHOLD)
                                 for meal in weekMeals[w]]
             # weekMeals[0] = (monday) [ ("L 2.77", det_link, T), ... ]
             weekMeals[w] = [iso_to_gregorian(e[0], e[1], w+1).strftime("%b %d"),
                                 weekMeals[w]]
             # weekMeals[0] = [ "Mar 14", [ ("L...", det_link, T), ... ] ]
             weekMeals[w][1].sort()
-        weekMeals.append(["", [(u"T \xA3%.2f" % (tot/100), ),
-                            (u"A \xA3%.2f" % (tot/100/mc), )]])
+        weekMeals.append(["", [(u"T \xA3%.2f" % (tot/100), False, ),
+                            (u"A \xA3%.2f" % (tot/100/mc), False, )]])
         cal[e] = weekMeals
     cal = sorted(list(cal.items()), reverse=True)
 
