@@ -45,8 +45,10 @@ def index(request):
                                 meal.meal_cost/100),
                                 reverse("mealy:meal_detail", args=(meal.id,)))
                                 for meal in weekMeals[w]]
+            # weekMeals[0] = (monday) [ ("L 2.77", det_link, T), ... ]
             weekMeals[w] = [iso_to_gregorian(e[0], e[1], w+1).strftime("%b %d"),
                                 weekMeals[w]]
+            # weekMeals[0] = [ "Mar 14", [ ("L...", det_link, T), ... ] ]
             weekMeals[w][1].sort()
         weekMeals.append(["", [(u"T \xA3%.2f" % (tot/100), ),
                             (u"A \xA3%.2f" % (tot/100/mc), )]])
