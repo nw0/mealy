@@ -20,8 +20,8 @@
           <th>&#8470;</th>
           <th>Type</th>
           <th>Name</th>
-          <th>Price</th>
           <th>Used</th>
+          <th>Price</th>
           <th>Best Bef.</th>
         </tr>
       </thead>
@@ -34,8 +34,11 @@
           <td><a href="{% url 'mealy:inv_detail' item.id %}">
             {{ item.res_name }}</a> {{ item.amt_original }}
             {{ item.units_original }}</td>
-          <td>{{ item.price|price }}</td>
           <td>{{ item.used_so_far }}</td>
+          <td>{{ item.price|price }}<br>
+            {% if item.used_so_far > 0 %}
+            {{ item.price|div:item.used_so_far|price }}/u
+            {% else %}-{% endif %}</td>
           <td>{{ item.best_bef_date|date:"M j, Y" }}</td>
         {% endfor %}
       </tbody>
