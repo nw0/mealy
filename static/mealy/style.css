@@ -14,3 +14,15 @@ tr.meal-cell-foot {
   font-size: .8em;
   vertical-align: bottom;
 }
+
+table.invent {
+  counter-reset: rowNumber;
+}
+
+table.invent tbody tr {
+  counter-increment: rowNumber;
+}
+
+table.invent tbody tr td:first-child:before {
+  content: counter(rowNumber);
+}

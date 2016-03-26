@@ -14,9 +14,10 @@
     <h4>Inventory</h4>
     {% if items %}
     <p>We have the following items in our inventory:</p>
-    <table class="u-full-width">
+    <table class="u-full-width invent">
       <thead>
         <tr>
+          <th>&#8470;</th>
           <th>Type</th>
           <th>Name</th>
           <th>Price</th>
@@ -25,6 +26,7 @@
       <tbody>
         {% for item in items %}
         <tr>
+          <td></td>
           <td><a href="{% url 'mealy:types_detail' item.res_type.r_name %}"
             >{{ item.res_type.r_name }}</a></td>
           <td><a href="{% url 'mealy:inv_detail' item.id %}">
