@@ -77,6 +77,7 @@ class Meal(models.Model):
 
     def updatePriceDelta(self, delta):
         self.meal_cost += delta
+        self.open_cost += delta
         self.save()
 
     def refreshCosts(self):
@@ -91,6 +92,11 @@ class Meal(models.Model):
 
     def close_dep(self):
         self.dish_deps -= 1
+        self.save()
+
+    def close_cost(self, dep_cost):
+        self.open_cost -= dep_cost
+        self.closed_cost += dep_cost
         self.save()
 
     def __str__(self):
@@ -129,6 +135,7 @@ class Dish(models.Model):
         self.ticket_deps -= 1
         self.open_cost -= dep_cost
         self.save()
+        self.par_meal.close_cost(dep_cost)
 
         if self.ticket_deps <= 0:
             self.par_meal.close_dep()
