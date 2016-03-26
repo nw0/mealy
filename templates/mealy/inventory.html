@@ -21,6 +21,8 @@
           <th>Type</th>
           <th>Name</th>
           <th>Price</th>
+          <th>Used</th>
+          <th>Best Bef.</th>
         </tr>
       </thead>
       <tbody>
@@ -30,8 +32,11 @@
           <td><a href="{% url 'mealy:types_detail' item.res_type.r_name %}"
             >{{ item.res_type.r_name }}</a></td>
           <td><a href="{% url 'mealy:inv_detail' item.id %}">
-            {{ item.res_name }}</a></td>
+            {{ item.res_name }}</a> {{ item.amt_original }}
+            {{ item.units_original }}</td>
           <td>{{ item.price|price }}</td>
+          <td>{{ item.used_so_far }}</td>
+          <td>{{ item.best_bef_date|date:"M j, Y" }}</td>
         {% endfor %}
       </tbody>
     </table>
