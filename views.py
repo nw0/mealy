@@ -158,9 +158,13 @@ def types_detail(request, res_name):
     return HttpResponse(template.render(contDict, request))
 
 @login_required
-def invent(request):
-    inv = Resource_Inst.objects.filter(inst_owner=request.user.id,
+def invent(request, showAll):
+    if not showAll:
+        inv = Resource_Inst.objects.filter(inst_owner=request.user.id,
                         exhausted=False).order_by('res_type', 'purchase_date')
+    else:
+        inv = Resource_Inst.objects.filter(inst_owner=request.user.id).order_by(
+                        'res_type', 'purchase_date')
     template = loader.get_template("mealy/inventory.html")
     contDict = {    'items': inv,
                     'types': Resource_Type.objects.filter()
