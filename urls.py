@@ -17,4 +17,5 @@ urlpatterns = [
     url(r'^inventory/(?P<inst_id>\d+)/$',
         views.invent_detail, name="inv_detail"),
     url(r'^inventory/new/$', views.invent_new_item, name="inv_new"),
+    url(r'^about/$', views.about, name="about"),
 ]

@@ -26,3 +26,14 @@ table.invent tbody tr {
 table.invent tbody tr td:first-child:before {
   content: counter(rowNumber);
 }
+
+table li {
+  font-size: 0.9em;
+  margin: 0;
+  padding: 0;
+}
+
+table ul {
+  margin: 0;
+  padding: 0;
+}

@@ -1,0 +1,62 @@
+{% extends "mealy/base.html" %}
+
+{% block content %}
+<div class="twelve columns">
+  <h4>About this site</h4>
+  <p>Mealy 0.2.1</p>
+
+  <h3>Changelog</h3>
+  <table class="u-full-width">
+    <thead>
+      <tr>
+        <th>Version</th>
+        <th>Date</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>0.2.1</td>
+        <td>Apr. 5, 2016</td>
+        <td>Minor enhancements.
+          Non-user-facing:
+          <ul>
+            <li>Added all inventory items for future use</li>
+            <li>Added ability to arbitrarily finalise/de-finalise instances</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td><b>0.2</b></td>
+        <td>Mar. 26, 2016</td>
+        <td>Significant usability enhancements.
+          User-facing:
+          <ul>
+            <li>Changed price formatting to display £&#47;pence as sensible</li>
+            <li>Show closed, open costs of meals</li>
+            <li>Cleaned up meal titles</li>
+            <li>Removed table of meals from main page</li>
+            <li>Order dishes/tickets in meals/dishes (used to be random)</li>
+            <li>Indicate open meals on calendar and add price summary</li>
+            <li>Changed inventory to table layout</li>
+            <li>Show more detail in inventory</li>
+          </ul>
+          Other:
+          <ul>
+            <li>Reflowed file formatting</li>
+            <li>Removed extraneous templates</li>
+            <li>Added filter to format prices</li>
+            <li>Require user to be logged in (no AnonymousUser)</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td><b>0.1</b></td>
+        <td>Mar. 18, 2016</td>
+        <td>Initial working release with decent styling.
+          Basic functionality of adding items, meals, dishes present.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+{% endblock content %}
