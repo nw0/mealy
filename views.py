@@ -178,6 +178,16 @@ def invent_detail(request, inst_id):
     except Resource_Inst.DoesNotExist:
         raise Http404("Instance does not exist")
 
+    if request.method == "POST":
+        defin = request.POST['finalisation']
+        if defin == "final":
+            inst.finalise()
+        elif defin == "definal":
+            inst.definalise()
+        else:
+            raise Http404("Finalisation invalid")
+        return HttpResponseRedirect(reverse("mealy:inv_detail", args=[inst.id]))
+
     template = loader.get_template("mealy/inv_detail.html")
     contDict = { 'inst': inst }
     return HttpResponse(template.render(contDict, request))

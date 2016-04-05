@@ -8,9 +8,25 @@
 
 {% block content %}
 <h4>{{ inst.res_name }}</h4>
-This is a <a href="{% url 'mealy:types_detail' inst.res_type.r_name %}">
+<p>This is a <a href="{% url 'mealy:types_detail' inst.res_type.r_name %}">
   {{inst.res_type.r_name}}</a>, originally {{inst.amt_original}}
   {{inst.units_original}} and purchased at {{inst.price}}p on
-  {{inst.purchase_date}}. We have currently used {{inst.used_so_far}} units,
-  and the best before date is {{inst.best_bef_date}}.
+  {{inst.purchase_date}}. We have used {{inst.used_so_far}} units,
+  and the best before date is {{inst.best_bef_date}}.</p>
+
+{% if inst.exhausted %}
+<p>This instance is exhausted.</p>
+<form action="{% url 'mealy:inv_detail' inst.id %}" method="post">
+  {% csrf_token %}
+  <input type="hidden" name="finalisation" value="definal" />
+  <input type="submit" value="De-finalise" />
+</form>
+{% else %}
+<p>This instance is not exhausted.</p>
+<form action="{% url 'mealy:inv_detail' inst.id %}" method="post">
+  {% csrf_token %}
+  <input type="hidden" name="finalisation" value="final" />
+  <input type="submit" value="Finalise" />
+</form>
+{% endif %}
 {% endblock %}
