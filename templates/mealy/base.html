@@ -23,6 +23,7 @@
         <h1>Mealy</h1>
         <p>Welcome to mealy, <em>{{user}}</em>.</p>
         <p>{% block links %}
+          <a href="{% url 'mealy:index' %}">Main</a>
           <a href="{% url 'mealy:inventory' %}">Inventory</a>
           {% endblock links %}</p>
       </div>
@@ -34,8 +35,10 @@
     </div>
 
     <div class="row">
+      <hr>
       <p>Mealy on <a href="https://github.com/nw0/mealy/">GitHub</a>.
         <a href="{% url 'mealy:about' %}">About this site</a></p>
+    </div>
   </div>
 </body>
 </html>
