@@ -33,6 +33,14 @@ class Resource_Inst(models.Model):
         self.save()
         return
 
+    def definalise(self):
+        self.exhausted = False
+        affected_tickets = Resource_Ticket.objects.filter(resource_inst=self)
+        for ticket in affected_tickets:
+            ticket.definalise()
+        self.save()
+        return
+
     def update_usage(self, added_units, is_exhausted):
         if added_units <= 0:
             return 0
@@ -192,6 +200,11 @@ class Resource_Ticket(models.Model):
         self.finalised = True
         self.save()
         self.par_dish.close_dep(self.ticket_cost)
+
+    def definalise(self):
+        self.finalised = False
+        self.save()
+        self.par_dish.add_dep(self.ticket_cost)
 
     def __str__(self):
         return self.resource_inst.res_name
