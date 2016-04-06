@@ -54,14 +54,17 @@ class Resource_Inst(models.Model):
         if self.used_so_far == added_units:
             self.save()
             return self.price
-        affected_tickets = Resource_Ticket.objects.filter(resource_inst=self)
-        for ticket in affected_tickets:
-            ticket.updatePrice(
-                self.price * ticket.used_on_ticket / self.used_so_far)
+        self.refresh_dependent_ticket_prices()
         self.save()
         if is_exhausted:
             self.finalise()
         return self.price * added_units / self.used_so_far
+
+    def refresh_dependent_ticket_prices(self):
+        affected_tickets = Resource_Ticket.objects.filter(resource_inst=self)
+        for ticket in affected_tickets:
+            ticket.updatePrice(
+                self.price * ticket.used_on_ticket / self.used_so_far)
 
     def __str__(self):
         return self.res_name + " (" + str(self.id) + ")"
