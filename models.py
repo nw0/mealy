@@ -161,7 +161,7 @@ class Dish(models.Model):
         tCount = tickets.distinct().count()
         if tCount == 0:
             return "%s (empty)" % self.cooking_style
-        return "%s (%s)" % (self.cooking_style, tickets[0])
+        return "%s %s" % (self.get_cooking_style_display(), tickets[0])
 
 class TicketManager(models.Manager):
     def create_ticket(self, resource_inst, used_on_ticket, dish,
