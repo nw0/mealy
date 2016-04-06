@@ -60,6 +60,19 @@ class Resource_Inst(models.Model):
             self.finalise()
         return self.price * added_units / self.used_so_far
 
+    def change_name(self, newName):
+        self.res_name = newName
+        self.save()
+
+    def change_type(self, newType):
+        self.res_type = newType
+        self.save()
+
+    def change_price(self, newPrice):
+        self.price = newPrice
+        self.refresh_dependent_ticket_prices()
+        self.save()
+
     def refresh_dependent_ticket_prices(self):
         affected_tickets = Resource_Ticket.objects.filter(resource_inst=self)
         for ticket in affected_tickets:
