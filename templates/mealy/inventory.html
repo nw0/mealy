@@ -13,7 +13,13 @@
   <div class="eight columns">
     <h4>Inventory</h4>
     {% if items %}
-    <p>We have the following items in our inventory:</p>
+    {% if not showAll %}
+    <p>We currently have the following items in our inventory (<a
+      href="{% url 'mealy:inventory_all' %}">see all</a>):</p>
+    {% else %}
+    <p>This is a list of all historical items in our inventory (<a
+      href="{% url 'mealy:inventory' %}">see current</a>):</p>
+    {% endif %}
     <table class="u-full-width invent">
       <thead>
         <tr>
