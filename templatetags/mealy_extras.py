@@ -19,3 +19,9 @@ def price(pr, p2 = False):
     if pr < 100 and p2 < 100:
         return "%dp + %dp" % (pr, p2)
     return "£%.2f + £%.2f" % (pr/100, p2/100)
+
+@register.filter
+def dish_pretty(dish):
+    #   Assume that first word is the cooking style
+    dish = dish.__str__().partition(" ")
+    return "%s <em>%s</em>" % (dish[0], dish[2])
