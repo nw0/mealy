@@ -157,7 +157,11 @@ class Dish(models.Model):
         return sum([ ticket.ticket_cost for ticket in tickets ])
 
     def __str__(self):
-        return self.cooking_style
+        tickets = Resource_Ticket.objects.filter(par_dish=self).order_by('id')
+        tCount = tickets.distinct().count()
+        if tCount == 0:
+            return "%s (empty)" % self.cooking_style
+        return "%s (%s)" % (self.cooking_style, tickets[0])
 
 class TicketManager(models.Manager):
     def create_ticket(self, resource_inst, used_on_ticket, dish,
