@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import loader
 from django.core.urlresolvers import reverse
-from .forms import MealForm, DishForm, TicketForm, TicketFormSet
+from .forms import MealForm, DishForm, TicketForm, TicketFormSet, InstAttribForm
 import json, datetime, time
 
 from .models import Resource_Type, Resource_Inst, Resource_Ticket, \
@@ -180,17 +180,24 @@ def invent_detail(request, inst_id):
         raise Http404("Instance does not exist")
 
     if request.method == "POST":
-        defin = request.POST['finalisation']
-        if defin == "final":
-            inst.finalise()
-        elif defin == "definal":
-            inst.definalise()
+        formType = request.POST['formtype']
+        if formType == "finalisation":
+            defin = request.POST['finalisation']
+            if defin == "final":
+                inst.finalise()
+            elif defin == "definal":
+                inst.definalise()
+            else:
+                raise Http404("Finalisation invalid")
+        elif formType == "attribchange":
+            newPrice = int(request.POST['price'])
+            inst.change_price(newPrice)
         else:
-            raise Http404("Finalisation invalid")
+            raise Http404("We're not sure what form you submitted")
         return HttpResponseRedirect(reverse("mealy:inv_detail", args=[inst.id]))
 
     template = loader.get_template("mealy/inv_detail.html")
-    contDict = { 'inst': inst }
+    contDict = { 'inst': inst, 'attrib_form': InstAttribForm }
     return HttpResponse(template.render(contDict, request))
 
 @login_required

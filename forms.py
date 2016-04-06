@@ -32,3 +32,6 @@ class TicketForm(forms.Form):
     exhausted       = forms.BooleanField()
 
 TicketFormSet = formset_factory(TicketForm, extra=2)
+
+class InstAttribForm(forms.Form):
+    price   = forms.IntegerField()
