@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: latin-1 -*-
 from django import template
+from django.utils.html import format_html
 
 register = template.Library()
 
@@ -24,4 +25,5 @@ def price(pr, p2 = False):
 def dish_pretty(dish):
     #   Assume that first word is the cooking style
     dish = dish.__str__().partition(" ")
-    return "%s <em>%s</em>" % (dish[0], dish[2])
+    return format_html("{} <em>{}</em>", dish[0], dish[2])
+    #return "%s <em>%s</em>" % (dish[0], dish[2])
