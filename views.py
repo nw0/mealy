@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import loader
@@ -8,6 +8,7 @@ import json, datetime, time
 
 from .models import Resource_Type, Resource_Inst, Resource_Ticket, \
                 TicketManager, Meal, Dish
+from .admin import other_checks
 # Create your views here.
 
 SEMI_OPEN_STATE_THRESHOLD = 10
@@ -20,6 +21,7 @@ def iso_to_gregorian(iso_year, iso_week, iso_day):
                                             weeks=iso_week-fifth_jan_week)
 
 @login_required
+@user_passes_test(other_checks)
 def index(request):
     #   We want to know what meals there are
     meal_list = Meal.objects.filter(
@@ -70,6 +72,7 @@ def index(request):
     return HttpResponse(template.render(contDict, request))
 
 @login_required
+@user_passes_test(other_checks)
 def meal_detail(request, meal_id):
     try:
         meal = Meal.objects.get(id=meal_id, meal_owner=request.user)
@@ -82,6 +85,7 @@ def meal_detail(request, meal_id):
     return HttpResponse(template.render(contDict, request))
 
 @login_required
+@user_passes_test(other_checks)
 def meal_new(request):
     nm = Meal(
         meal_type   = request.POST["meal_type"],
@@ -92,6 +96,7 @@ def meal_new(request):
     return HttpResponseRedirect(reverse("mealy:index"))
 
 @login_required
+@user_passes_test(other_checks)
 def add_dish(request, meal_id):
     try:
         meal = Meal.objects.get(id=meal_id, meal_owner=request.user)
@@ -109,6 +114,7 @@ def add_dish(request, meal_id):
         return HttpResponse(template.render(contDict, request))
 
 @login_required
+@user_passes_test(other_checks)
 def dish_detail(request, dish_id):
     try:
         dish = Dish.objects.get(id=dish_id, par_meal__meal_owner=request.user)
@@ -135,6 +141,7 @@ def dish_detail(request, dish_id):
     return HttpResponse(template.render(contDict, request))
 
 @login_required
+@user_passes_test(other_checks)
 def types(request):
     type_list = Resource_Type.objects.order_by('r_parent')
     #output = ', '.join([t.r_name for t in type_list])
@@ -143,6 +150,7 @@ def types(request):
     return HttpResponse(template.render(contDict, request))
 
 @login_required
+@user_passes_test(other_checks)
 def types_detail(request, res_name):
     try:
         ex_type = Resource_Type.objects.get(r_name=res_name)
@@ -158,6 +166,7 @@ def types_detail(request, res_name):
     return HttpResponse(template.render(contDict, request))
 
 @login_required
+@user_passes_test(other_checks)
 def invent(request, showAll):
     if not showAll:
         inv = Resource_Inst.objects.filter(inst_owner=request.user.id,
@@ -173,6 +182,7 @@ def invent(request, showAll):
     return HttpResponse(template.render(contDict, request))
 
 @login_required
+@user_passes_test(other_checks)
 def invent_detail(request, inst_id):
     try:
         inst = Resource_Inst.objects.get(id=inst_id, inst_owner=request.user)
@@ -201,6 +211,7 @@ def invent_detail(request, inst_id):
     return HttpResponse(template.render(contDict, request))
 
 @login_required
+@user_passes_test(other_checks)
 def invent_new_item(request):
     #   Add a new object
     ni = Resource_Inst(
@@ -220,5 +231,6 @@ def invent_new_item(request):
     return HttpResponseRedirect(reverse("mealy:inventory"))
 
 @login_required
+@user_passes_test(other_checks)
 def about(request):
     return render(request, "mealy/about.html")
