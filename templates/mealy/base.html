@@ -21,9 +21,9 @@
     <div class="row" id="navbar">
       <header>
         <div class="two columns">
-          <p>Mealy</p>
+          <h1>Mealy</h1>
         </div>
-        <div class="ten columns">
+        <div class="eight columns">
           <nav>
             {% block links %}
             <ul>
@@ -32,6 +32,9 @@
             </ul>
             {% endblock links %}
           </nav>
+        </div>
+        <div class="two columns">
+          <p><em>{{ user }}</em></p>
         </div>
       </header>
     </div>

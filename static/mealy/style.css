@@ -38,11 +38,18 @@ table ul {
   padding: 0;
 }
 
-header p {
+header h1 {
   margin: 0;
   text-transform: uppercase;
   font-weight: 600;
-  font-size: 1.2em;
+  font-size: 1.3em;
+}
+
+header p {
+  float: right;
+  margin: 0;
+  font-weight: 400;
+  font-size: 1em;
 }
 
 #navbar {
@@ -53,7 +60,7 @@ header p {
 
 nav ul {
   list-style: none;
-  margin: .2em 0 0 0;
+  margin: 0em 0 0 0;
 }
 
 nav li {
