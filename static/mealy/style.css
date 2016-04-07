@@ -38,13 +38,22 @@ table ul {
   padding: 0;
 }
 
-nav {
+header p {
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 1.2em;
+}
+
+#navbar {
   border-bottom: #AAA 1px solid;
   padding: 1rem 2rem;
+  margin-bottom: 1.5rem;
 }
 
 nav ul {
   list-style: none;
+  margin: .2em 0 0 0;
 }
 
 nav li {
@@ -55,7 +64,7 @@ nav li {
 nav li a {
   margin: 0 2rem;
   color: #222;
-  font-weight: 600;
+  font-weight: 400;
   text-transform: uppercase;
   text-decoration: none;
   letter-spacing: .1em;

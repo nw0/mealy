@@ -18,24 +18,22 @@
 
 <body>
   <div class="container">
-    <nav>
-      <div class="row">
-        <div class="twelve columns">
-          {% block links %}
-          <ul>
-            <li><a href="{% url 'mealy:index' %}">Main</a></li>
-            <li><a href="{% url 'mealy:inventory' %}">Inventory</a></li>
-          </ul>
-          {% endblock links %}
+    <div class="row" id="navbar">
+      <header>
+        <div class="two columns">
+          <p>Mealy</p>
         </div>
-      </div>
-    </nav>
-
-    <div class="row">
-      <div class="one-half column">
-        <h1>Mealy</h1>
-        <p>Welcome to mealy, <em>{{user}}</em>.</p>
-      </div>
+        <div class="ten columns">
+          <nav>
+            {% block links %}
+            <ul>
+              <li><a href="{% url 'mealy:index' %}">Main</a></li>
+              <li><a href="{% url 'mealy:inventory' %}">Inventory</a></li>
+            </ul>
+            {% endblock links %}
+          </nav>
+        </div>
+      </header>
     </div>
 
     <div class="row">
