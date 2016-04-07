@@ -1,11 +1,6 @@
 {% extends "mealy/base.html" %}
 {% load mathfilters %}
 
-{% block links %}
-<a href="{% url 'mealy:index' %}">Main</a>
-<a href="{% url 'mealy:inventory' %}">Inventory</a>
-{% endblock links %}
-
 {% block content %}
 {% if type_list %}
 <ul>

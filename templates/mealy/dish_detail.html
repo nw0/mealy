@@ -2,11 +2,6 @@
 {% load mathfilters %}
 {% load mealy_extras %}
 
-{% block links %}
-<a href="{% url 'mealy:index' %}">Main</a>
-<a href="{% url 'mealy:inventory' %}">Inventory</a>
-{% endblock links %}
-
 {% block content %}
 <div class="eight columns">
   <p>{{ dish|dish_pretty|safe }} @
