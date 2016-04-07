@@ -5,8 +5,11 @@
 {% block title %}Mealy - Inventory{% endblock title %}
 
 {% block links %}
-<a href="{% url 'mealy:index' %}">Main</a>
-<a href="{% url 'mealy:types' %}">Types</a>
+<ul>
+  <li><a href="{% url 'mealy:index' %}">Main</a></li>
+  <li><a href="{% url 'mealy:inventory' %}">Inventory</a></li>
+  <li><a href="{% url 'mealy:types' %}">Types</a></li>
+</ul>
 {% endblock links %}
 
 {% block content %}

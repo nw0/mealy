@@ -37,3 +37,26 @@ table ul {
   margin: 0;
   padding: 0;
 }
+
+nav {
+  border-bottom: #AAA 1px solid;
+  padding: 1rem 2rem;
+}
+
+nav ul {
+  list-style: none;
+}
+
+nav li {
+  float: left;
+  margin: 0;
+}
+
+nav li a {
+  margin: 0 2rem;
+  color: #222;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-decoration: none;
+  letter-spacing: .1em;
+}
