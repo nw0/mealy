@@ -30,9 +30,9 @@
           <td>{% for line in mealday.1 %}
             <div class="mealln">{% if line.1 %}<a href="{{line.1}}">{% endif %}
               {{ line.0 }}{% if line.2 > semi_open %}*{% endif %}
-              {% if line.1 %}</a>{% endif %}
+              {% if line.1 %}</a>{% endif %}{% if prog_bars %}
               <progress max="{{line.3}}" value="{{line.3|sub:line.2}}">
-              </progress></div><br>{% endfor %}</td>
+              </progress>{% endif %}</div><br>{% endfor %}</td>
         {% endfor %}
       </tr>
       {% endfor %}

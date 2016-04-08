@@ -12,6 +12,7 @@ from .admin import other_checks
 # Create your views here.
 
 SEMI_OPEN_STATE_THRESHOLD = 10
+ENABLE_CAL_PROGRESS_BARS = True
 
 def iso_to_gregorian(iso_year, iso_week, iso_day):
     "Gregorian calendar date for the given ISO year, week and day"
@@ -70,6 +71,7 @@ def index(request):
                     'user':     request.user,
                     'cal_meals': cal,
                     'semi_open': SEMI_OPEN_STATE_THRESHOLD,
+                    'prog_bars': ENABLE_CAL_PROGRESS_BARS,
                 }
     return HttpResponse(template.render(contDict, request))
 
