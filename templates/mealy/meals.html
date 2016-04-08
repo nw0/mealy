@@ -4,6 +4,7 @@
 {% block content %}
 <div class="eight columns">
   <h4>Meal list</h4>
+
   {% if meal_list %}
   <table class="u-full-width">
     <thead>
@@ -27,9 +28,11 @@
       <tr class="meal-cell-foot">
         {% for mealday in mealwk.1 %}
           <td>{% for line in mealday.1 %}
-            {% if line.1 %}<a href="{{line.1}}">{% endif %}
-              {{ line.0 }}{% if line.2 %}*{% endif %}
-              {% if line.1 %}</a>{% endif %}<br>{% endfor %}</td>
+            <div class="mealln">{% if line.1 %}<a href="{{line.1}}">{% endif %}
+              {{ line.0 }}{% if line.2 > semi_open %}*{% endif %}
+              {% if line.1 %}</a>{% endif %}
+              <progress max="{{line.3}}" value="{{line.3|sub:line.2}}">
+              </progress></div><br>{% endfor %}</td>
         {% endfor %}
       </tr>
       {% endfor %}

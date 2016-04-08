@@ -49,17 +49,17 @@ def index(request):
             weekMeals[w] = [ (u"%s \xA3%.2f" % (meal.meal_type[0],
                                 meal.meal_cost/100),
                                 reverse("mealy:meal_detail", args=(meal.id,)),
-                                meal.open_cost > SEMI_OPEN_STATE_THRESHOLD)
+                                meal.open_cost, meal.meal_cost)
                                 for meal in weekMeals[w]]
-            # weekMeals[0] = (monday) [ ("L 2.77", det_link, T), ... ]
+            # weekMeals[0] = (monday) [ ("L 2.77", det_link, 0.56, 2.77), ... ]
             weekMeals[w] = [iso_to_gregorian(e[0], e[1], w+1).strftime("%b %d"),
                                 weekMeals[w]]
-            # weekMeals[0] = [ "Mar 14", [ ("L...", det_link, T), ... ] ]
+            # weekMeals[0] = [ "Mar 14", [("L...", det_link, 0.56, 2.77), ...] ]
             weekMeals[w][1].sort()
         weekMeals.append(["", [(u"T \xA3%.2f (%.2f)" % (tot/100, opensum/100),
-                                    False, ),
+                                    False, opensum, tot),
                             (u"A \xA3%.2f (%.2f)" %
-                                    (tot/100/mc, opensum/100/mc), False, )]])
+                                    (tot/100/mc, opensum/100/mc), False, opensum/mc, tot/mc)]])
         cal[e] = weekMeals
     cal = sorted(list(cal.items()), reverse=True)
 
@@ -68,7 +68,9 @@ def index(request):
                     'mtypes': Meal.MEAL_TYPES,
                     'meal_form': MealForm,
                     'user':     request.user,
-                    'cal_meals': cal }
+                    'cal_meals': cal,
+                    'semi_open': SEMI_OPEN_STATE_THRESHOLD,
+                }
     return HttpResponse(template.render(contDict, request))
 
 @login_required

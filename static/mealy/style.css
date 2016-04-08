@@ -76,3 +76,36 @@ nav li a {
   text-decoration: none;
   letter-spacing: .1em;
 }
+
+div.mealln {
+  height: 1.3rem;
+  max-width: 8.5rem;
+  position: absolute;
+}
+
+progress, progress[role] {
+  position: relative;
+  top: -1.4rem;
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  display: inline-block;
+  background-size: auto;
+  width: 5rem;
+	height: 2px;
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+progress[value]::-webkit-progress-bar {
+  background: #e74c3c;
+}
+
+progress[value]::-webkit-progress-value {
+  background: #2ecc71;
+}
+
+progress[value]::-moz-progress-bar {
+  background: #2ecc71;
+}
