@@ -17,20 +17,20 @@ class Dish(models.Model):
 
     def updatePriceDelta(self, delta):
         #   Add the delta to the meal price
-        self.par_meal.updatePriceDelta(delta)
+        self.par_meal.openCostsDelta(delta)
 
     def remove_ticket(self, ticket_cost):
         #   Assumes the ticket is open
         self.ticket_deps -= 1
         self.save()
 
-        self.par_meal.updatePriceDelta(-ticket_cost)
+        self.par_meal.openCostsDelta(-ticket_cost)
 
     def add_dep(self, dep_cost):
         self.ticket_deps += 1
         self.save()
 
-        self.par_meal.updatePriceDelta(dep_cost)
+        self.par_meal.openCostsDelta(dep_cost)
 
     def close_dep(self, dep_cost):
         #   Assume that closure will always involve a positive cost

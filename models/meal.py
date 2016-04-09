@@ -16,7 +16,7 @@ class Meal(models.Model):
     closed_cost = models.FloatField(default=0)
     meal_owner  = models.ForeignKey(User)
 
-    def updatePriceDelta(self, delta):
+    def openCostsDelta(self, delta):
         self.open_cost += delta
         self.save()
 
