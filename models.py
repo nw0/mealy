@@ -42,8 +42,6 @@ class Resource_Inst(models.Model):
         return
 
     def update_usage(self, added_units, is_exhausted):
-        if added_units <= 0:
-            return 0
         #   We want to:
         #   1. Check the current (units) usage of the resource `inst`
         #   2. Update the usage, taking the fraction of the added usage to
@@ -140,7 +138,7 @@ class Dish(models.Model):
     cooking_style   = models.CharField(max_length=8, choices=COOKING_STYLES)
     par_meal        = models.ForeignKey(Meal)
     ticket_deps     = models.IntegerField(default=0)
-    open_cost       = models.FloatField(default=0)
+    open_cost       = models.FloatField(default=0)      #   to be deprecated
 
     def updatePriceDelta(self, delta):
         #   Add the delta to the meal price
@@ -148,6 +146,16 @@ class Dish(models.Model):
         self.save()
 
         self.par_meal.updatePriceDelta(delta)
+
+    def remove_ticket(self, ticket_cost):
+        #   Assumes the ticket is open
+        self.open_cost -= ticket_cost
+        self.ticket_deps -= 1
+        self.save()
+
+        self.par_meal.updatePriceDelta(-ticket_cost)
+        if self.ticket_deps <= 0:
+            self.par_meal.close_dep()
 
     def add_dep(self, dep_cost):
         self.ticket_deps += 1
@@ -237,6 +245,13 @@ class Resource_Ticket(models.Model):
         self.finalised = False
         self.save()
         self.par_dish.reopen_dep(self.ticket_cost)
+
+    def remove(self):
+        amt_used = self.used_on_ticket
+        tcost = self.ticket_cost
+        self.delete()
+        self.par_dish.remove_ticket(tcost)
+        self.resource_inst.update_usage(-amt_used, self.resource_inst.exhausted)
 
     def __str__(self):
         return self.resource_inst.res_name

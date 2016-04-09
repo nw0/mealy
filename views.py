@@ -204,8 +204,26 @@ def invent_detail(request, inst_id):
             else:
                 raise Http404("Finalisation invalid")
         elif formType == "attribchange":
+            initf = inst.exhausted
+            if initf:
+                inst.definalise()
             newPrice = int(request.POST['price'])
             inst.change_price(newPrice)
+            if initf:
+                inst.finalise()
+        elif formType == "cancelticket":
+            ticketId = int(request.POST['ticketid'])
+            try:
+                ticket = Resource_Ticket.objects.get(id=ticketId,
+                                                        resource_inst=inst)
+            except Resource_Ticket.DoesNotExist:
+                raise Http404("Invalid ticket")
+            initf = inst.exhausted
+            if initf:
+                inst.definalise()
+            ticket.remove()
+            if initf:
+                inst.finalise()
         else:
             raise Http404("We're not sure what form you submitted")
         return HttpResponseRedirect(reverse("mealy:inv_detail", args=[inst.id]))

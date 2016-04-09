@@ -47,6 +47,7 @@
         <th>Dish</th>
         <th>Units</th>
         <th>Price</th>
+        <th>Admin</th>
       </thead>
       <tbody>
         {% for ticket in tickets %}
@@ -56,6 +57,12 @@
             {{ ticket.par_dish }}</a></td>
           <td>{{ ticket.used_on_ticket }}</td>
           <td>{{ ticket.ticket_cost|price }}</td>
+          <td><form action="{% url 'mealy:inv_detail' inst.id %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="formtype" value="cancelticket" />
+            <input type="hidden" name="ticketid" value="{{ ticket.id }}" />
+            <input type="submit" value="Cancel"/>
+          </form></td>
         </tr>
         {% endfor %}
       </tbody>

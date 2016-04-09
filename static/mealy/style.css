@@ -38,6 +38,14 @@ table ul {
   padding: 0;
 }
 
+table form {
+  margin: 0;
+}
+
+table form input {
+  margin: 0;
+}
+
 header h1 {
   margin: 0;
   text-transform: uppercase;
