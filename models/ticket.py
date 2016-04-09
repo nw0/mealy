@@ -14,7 +14,6 @@ class TicketManager(models.Manager):
             resource_inst   = resource_inst,
             used_on_ticket  = used_on_ticket,
             ticket_cost     = resource_inst.update_usage(used_on_ticket),
-            finalised       = resource_exhausted,
             par_dish        = dish
         )
         ticket.save()
