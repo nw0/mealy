@@ -3,6 +3,8 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import loader
 from django.core.urlresolvers import reverse
+from django.views import generic
+from django.utils.decorators import method_decorator
 from .forms import MealForm, DishForm, TicketForm, TicketFormSet, InstAttribForm
 import json, datetime, time
 
@@ -10,6 +12,8 @@ from .models import Resource_Type, Resource_Inst, Resource_Ticket, \
                 TicketManager, Meal, Dish
 from .admin import other_checks
 # Create your views here.
+
+decs = [ login_required, user_passes_test(other_checks)]
 
 SEMI_OPEN_STATE_THRESHOLD = 10
 ENABLE_CAL_PROGRESS_BARS = True
@@ -135,23 +139,18 @@ def dish_detail(request, dish_id):
     template    = loader.get_template("mealy/dish_detail.html")
     return HttpResponse(template.render(contDict, request))
 
-@login_required
-@user_passes_test(other_checks)
-def types(request):
-    type_list = Resource_Type.objects.order_by('r_parent')
-    #output = ', '.join([t.r_name for t in type_list])
-    template = loader.get_template("mealy/types.html")
-    contDict = { 'type_list': type_list }
-    return HttpResponse(template.render(contDict, request))
+@method_decorator(decs, name='dispatch')
+class TypesView(generic.ListView):
+    template_name       = "mealy/types.html"
+    context_object_name = "type_list"
+    queryset            = Resource_Type.objects.order_by('r_parent')
 
-@login_required
-@user_passes_test(other_checks)
-def types_detail(request, res_name):
-    ex_type = get_object_or_404(Resource_Type, r_name=res_name)
-    template = loader.get_template("mealy/types_detail.html")
-    contDict = {    "r_type": ex_type,
-                }
-    return HttpResponse(template.render(contDict, request))
+@method_decorator(decs, name='dispatch')
+class TypesDetailView(generic.DetailView):
+    template_name       = "mealy/types_detail.html"
+    context_object_name = "r_type"
+    slug_field          = "r_name"
+    queryset            = Resource_Type.objects.all()
 
 @login_required
 @user_passes_test(other_checks)
