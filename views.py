@@ -152,21 +152,22 @@ class TypesDetailView(generic.DetailView):
     slug_field          = "r_name"
     queryset            = Resource_Type.objects.all()
 
-@login_required
-@user_passes_test(other_checks)
-def invent(request, showAll):
-    if not showAll:
-        inv = Resource_Inst.objects.filter(inst_owner=request.user.id,
-                        exhausted=False).order_by('res_type', 'purchase_date')
-    else:
-        inv = Resource_Inst.objects.filter(inst_owner=request.user.id).order_by(
-                        'res_type', 'purchase_date')
-    template = loader.get_template("mealy/inventory.html")
-    contDict = {    'items':    inv,
-                    'types':    Resource_Type.objects.filter(),
-                    'showAll':  showAll,
-                }
-    return HttpResponse(template.render(contDict, request))
+@method_decorator(decs, name='dispatch')
+class InventView(generic.ListView):
+    template_name       = "mealy/inventory.html"
+    context_object_name = "items"
+
+    def get_queryset(self):
+        objs = Resource_Inst.objects.filter(inst_owner=self.request.user.id)
+        if not self.kwargs['showAll']:
+            objs = objs.filter(exhausted=False)
+        return objs.order_by('res_type', 'purchase_date')
+
+    def get_context_data(self, **kwargs):
+        context = super(InventView, self).get_context_data(**kwargs)
+        context['types']    = Resource_Type.objects.all()
+        context['showAll']  = self.kwargs['showAll']
+        return context
 
 @login_required
 @user_passes_test(other_checks)
