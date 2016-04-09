@@ -6,7 +6,7 @@
 <div class="eight columns">
   <h4>{{ meal }}</h4>
   <p>This meal cost {{ meal.get_meal_cost|price }} with
-    {{meal.dish_deps}} unresolved items.</p>
+    {{meal.get_dish_deps}} unresolved items.</p>
   {% if dishes %}
   <p>It has these dishes:</p>
   <ol>

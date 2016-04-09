@@ -14,7 +14,6 @@ class Meal(models.Model):
     meal_type   = models.CharField(choices=MEAL_TYPES, max_length=10)
     open_cost   = models.FloatField(default=0)
     closed_cost = models.FloatField(default=0)
-    dish_deps   = models.IntegerField(default=0)
     meal_owner  = models.ForeignKey(User)
 
     def updatePriceDelta(self, delta):
@@ -27,9 +26,8 @@ class Meal(models.Model):
         self.closed_cost = sum([ dish.get_closed_cost() for dish in dishes ])
         self.save()
 
-    def adjust_dep(self, steps):
-        self.dish_deps += int(steps)
-        self.save()
+    def get_dish_deps(self):
+        return self.dish_set.filter(ticket_deps__gt=0).count()
 
     def get_meal_cost(self):
         return (self.open_cost + self.closed_cost)
