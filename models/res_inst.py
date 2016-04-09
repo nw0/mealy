@@ -66,7 +66,7 @@ class Resource_Inst(models.Model):
         self.save()
 
     def refresh_dependent_ticket_prices(self):
-        affected_tickets = self.resource_ticket_set.filter(resource_inst=self)
+        affected_tickets = self.resource_ticket_set.all()
         for ticket in affected_tickets:
             ticket.updatePrice(
                 self.price * ticket.used_on_ticket / self.used_so_far)

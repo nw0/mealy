@@ -21,7 +21,7 @@ class Meal(models.Model):
         self.save()
 
     def refreshCosts(self):
-        dishes = self.dish_set.filter(par_meal=self)
+        dishes = self.dish_set.all()
         self.open_cost = sum([ dish.get_open_cost() for dish in dishes ])
         self.closed_cost = sum([ dish.get_closed_cost() for dish in dishes ])
         self.save()

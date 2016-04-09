@@ -44,15 +44,15 @@ class Dish(models.Model):
         self.par_meal.close_cost(dep_cost)
 
     def get_closed_cost(self):
-        tickets = self.resource_ticket_set.filter(par_dish=self, finalised=True)
+        tickets = self.resource_ticket_set.filter(finalised=True)
         return sum([ ticket.ticket_cost for ticket in tickets ])
 
     def get_open_cost(self):
-        tickets = self.resource_ticket_set.filter(par_dish=self, finalised=False)
+        tickets = self.resource_ticket_set.filter(finalised=False)
         return sum([ ticket.ticket_cost for ticket in tickets ])
 
     def __str__(self):
-        tickets = self.resource_ticket_set.filter(par_dish=self).order_by('id')
+        tickets = self.resource_ticket_set.all().order_by('id')
         tCount = tickets.distinct().count()
         if tCount == 0:
             return "%s (empty)" % self.cooking_style
