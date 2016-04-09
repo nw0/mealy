@@ -25,6 +25,7 @@ class Resource_Inst(models.Model):
         self.set_finalisation(False)
 
     def set_finalisation(self, finalisation):
+        assert isinstance(finalisation, bool), "Invalid finalisation"
         #   We need to find all the tickets and update them
         self.exhausted = finalisation
         affected_tickets = self.resource_ticket_set.all()
@@ -37,6 +38,12 @@ class Resource_Inst(models.Model):
         return
 
     def update_usage(self, added_units, is_exhausted):
+        assert added_units < 0 or not self.exhausted, \
+            "Unable to use an exhausted resource"
+        if added_units == 0:
+            return
+        if not isinstance(is_exhausted, bool):
+            is_exhausted = self.exhausted
         #   We want to:
         #   1. Check the current (units) usage of the resource `inst`
         #   2. Update the usage, taking the fraction of the added usage to
@@ -44,9 +51,6 @@ class Resource_Inst(models.Model):
         #   3. Check Resource_Ticket instances for references to `inst`, and
         #       amortise their respective `ticket_cost`s
         self.used_so_far += added_units
-        if self.used_so_far == added_units:
-            self.save()
-            return self.price
         self.refresh_dependent_ticket_prices()
         self.save()
         if is_exhausted:
@@ -67,10 +71,15 @@ class Resource_Inst(models.Model):
         self.save()
 
     def refresh_dependent_ticket_prices(self):
+        was_finalised = self.exhausted
+        self.definalise()
+
         affected_tickets = self.resource_ticket_set.all()
         for ticket in affected_tickets:
             ticket.updatePrice(
                 self.price * ticket.used_on_ticket / self.used_so_far)
+
+        self.set_finalisation(was_finalised)
 
     def __str__(self):
         return self.res_name + " (" + str(self.id) + ")"

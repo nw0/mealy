@@ -43,14 +43,16 @@ class Resource_Ticket(models.Model):
 
     def finalise(self):
         #   We need to find the meal and see if it can be finalised
-        self.finalised = True
-        self.save()
-        self.par_dish.close_dep(self.ticket_cost)
+        if not self.finalised:
+            self.finalised = True
+            self.save()
+            self.par_dish.close_dep(self.ticket_cost)
 
     def definalise(self):
-        self.finalised = False
-        self.save()
-        self.par_dish.close_dep(-self.ticket_cost)
+        if self.finalised:
+            self.finalised = False
+            self.save()
+            self.par_dish.close_dep(-self.ticket_cost)
 
     def remove(self):
         amt_used = self.used_on_ticket
