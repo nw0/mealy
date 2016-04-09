@@ -195,7 +195,7 @@ def invent_detail(request, inst_id):
 
     if request.method == "POST":
         formType = request.POST['formtype']
-        if formType == "finalisation":
+        if formType == "finalise":
             defin = request.POST['finalisation']
             if defin == "final":
                 inst.finalise()

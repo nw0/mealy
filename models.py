@@ -118,6 +118,9 @@ class Meal(models.Model):
         self.dish_deps -= 1
         self.save()
 
+    def reopen_cost(self, dep_cost):
+        self.close_cost(-dep_cost)
+
     def close_cost(self, dep_cost):
         self.open_cost -= dep_cost
         self.closed_cost += dep_cost
@@ -152,6 +155,15 @@ class Dish(models.Model):
         self.save()
 
         self.par_meal.updatePriceDelta(dep_cost)
+        if self.ticket_deps == 1:
+            self.par_meal.add_dep()
+
+    def reopen_dep(self, dep_cost):
+        self.ticket_deps += 1
+        self.open_cost += dep_cost
+        self.save()
+
+        self.par_meal.reopen_cost(dep_cost)
         if self.ticket_deps == 1:
             self.par_meal.add_dep()
 
@@ -224,7 +236,7 @@ class Resource_Ticket(models.Model):
     def definalise(self):
         self.finalised = False
         self.save()
-        self.par_dish.add_dep(self.ticket_cost)
+        self.par_dish.reopen_dep(self.ticket_cost)
 
     def __str__(self):
         return self.resource_inst.res_name
