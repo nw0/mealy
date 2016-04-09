@@ -44,13 +44,13 @@ def index(request):
         for w in xrange(7):
             weekMeals[w] = cal[e][w+1] if w+1 in cal[e] else []
             for meal in weekMeals[w]:
-                tot += meal.meal_cost
+                tot += meal.get_meal_cost()
                 mc += 1
                 opensum += meal.open_cost
             weekMeals[w] = [ (u"%s \xA3%.2f" % (meal.meal_type[0],
-                                meal.meal_cost/100),
+                                meal.get_meal_cost()/100),
                                 reverse("mealy:meal_detail", args=(meal.id,)),
-                                meal.open_cost, meal.meal_cost)
+                                meal.open_cost, meal.get_meal_cost())
                                 for meal in weekMeals[w]]
             # weekMeals[0] = (monday) [ ("L 2.77", det_link, 0.56, 2.77), ... ]
             weekMeals[w] = [iso_to_gregorian(e[0], e[1], w+1).strftime("%b %d"),

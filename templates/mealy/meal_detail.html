@@ -5,7 +5,7 @@
 {% block content %}
 <div class="eight columns">
   <h4>{{ meal }}</h4>
-  <p>This meal cost {{ meal.meal_cost|price }} with
+  <p>This meal cost {{ meal.get_meal_cost|price }} with
     {{meal.dish_deps}} unresolved items.</p>
   {% if dishes %}
   <p>It has these dishes:</p>

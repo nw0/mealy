@@ -37,6 +37,9 @@ class Meal(models.Model):
         self.dish_deps -= 1
         self.save()
 
+    def get_meal_cost(self):
+        return (self.open_cost + self.closed_cost)
+
     def reopen_cost(self, dep_cost):
         self.close_cost(-dep_cost)
 

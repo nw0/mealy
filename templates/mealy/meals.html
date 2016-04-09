@@ -52,7 +52,7 @@
         <td>{{ meal.cons_time|date:"D dS M Y" }}</td>
         <td><a href="{% url 'mealy:meal_detail' meal.id %}">
           {{ meal.meal_type }}</a></td>
-        <td>{{ meal.meal_cost|div:100|floatformat:2 }}
+        <td>{{ meal.get_meal_cost|div:100|floatformat:2 }}
           {% if meal.dish_deps %} ({{ meal.dish_deps }}*){% endif %}</td>
       </tr>
       {% endfor %}
