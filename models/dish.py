@@ -16,10 +16,12 @@ class Dish(models.Model):
     ticket_deps     = models.IntegerField(default=0)
 
     def updatePriceDelta(self, delta):
+        assert self.ticket_deps > 0, "Dish has no open tickets"
         #   Add the delta to the meal price
         self.par_meal.openCostsDelta(delta)
 
     def remove_ticket(self, ticket_cost):
+        assert self.ticket_deps > 0, "Dish has no open tickets"
         #   Assumes the ticket is open
         self.ticket_deps -= 1
         self.save()
@@ -36,6 +38,7 @@ class Dish(models.Model):
         #   Assume that closure will always involve a positive cost
         #   Then: if dep_cost < 0, this signifies a "re-opening" of costs
         if dep_cost >= 0:
+            assert self.ticket_deps > 0, "Dish has no open tickets"
             self.ticket_deps -= 1
         else:
             self.ticket_deps += 1

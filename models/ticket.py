@@ -34,6 +34,7 @@ class Resource_Ticket(models.Model):
     objects = TicketManager()
 
     def updatePrice(self, newPrice):
+        assert not self.finalised, "Ticket has been finalised"
         #   We need to find all the dishes and update the price
         delta = newPrice - self.ticket_cost
         self.ticket_cost = newPrice
