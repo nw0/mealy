@@ -40,7 +40,7 @@ class Dish(models.Model):
         self.ticket_deps += 1
         self.save()
 
-        self.par_meal.reopen_cost(dep_cost)
+        self.par_meal.close_cost(-dep_cost)
         if self.ticket_deps == 1:
             self.par_meal.add_dep()
 

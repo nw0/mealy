@@ -38,10 +38,10 @@ class Meal(models.Model):
     def get_meal_cost(self):
         return (self.open_cost + self.closed_cost)
 
-    def reopen_cost(self, dep_cost):
-        self.close_cost(-dep_cost)
-
     def close_cost(self, dep_cost):
+        #   Assume that closure will always involve shifting a positive cost
+        #    from open_cost to closed_cost
+        #   Then: if dep_cost < 0, this signifies a "re-opening" of costs
         self.open_cost -= dep_cost
         self.closed_cost += dep_cost
         self.save()
