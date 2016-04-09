@@ -78,10 +78,7 @@ def index(request):
 @login_required
 @user_passes_test(other_checks)
 def meal_detail(request, meal_id):
-    try:
-        meal = Meal.objects.get(id=meal_id, meal_owner=request.user)
-    except Meal.DoesNotExist:
-        raise Http404("Meal does not exist")
+    meal = get_object_or_404(Meal, id=meal_id, meal_owner=request.user)
 
     dishes      = Dish.objects.filter(par_meal=meal).order_by('id')
     template    = loader.get_template("mealy/meal_detail.html")
@@ -102,10 +99,7 @@ def meal_new(request):
 @login_required
 @user_passes_test(other_checks)
 def add_dish(request, meal_id):
-    try:
-        meal = Meal.objects.get(id=meal_id, meal_owner=request.user)
-    except Meal.DoesNotExist:
-        raise Http404("Meal does not exist")
+    meal = get_object_or_404(Meal, id=meal_id, meal_owner=request.user)
 
     if request.method == "POST":
         nd = Dish(cooking_style=request.POST['dish_style'], par_meal=meal)
@@ -120,10 +114,7 @@ def add_dish(request, meal_id):
 @login_required
 @user_passes_test(other_checks)
 def dish_detail(request, dish_id):
-    try:
-        dish = Dish.objects.get(id=dish_id, par_meal__meal_owner=request.user)
-    except Dish.DoesNotExist:
-        raise Http404("Dish does not exist")
+    dish = get_object_or_404(Dish, id=dish_id, par_meal__meal_owner=request.user)
 
     if request.method == "POST":
         res_inst = Resource_Inst.objects.get(id=request.POST['resource_inst'],
@@ -156,10 +147,7 @@ def types(request):
 @login_required
 @user_passes_test(other_checks)
 def types_detail(request, res_name):
-    try:
-        ex_type = Resource_Type.objects.get(r_name=res_name)
-    except Resource_Type.DoesNotExist:
-        raise Http404("Resource Type does not exist.")
+    ex_type = get_object_or_404(Resource_Type, r_name=res_name)
     #type_list = Resource_Type.objects.filter(r_parent=ex_type)
     type_list = ex_type.resource_type_set.all()
     template = loader.get_template("mealy/types_detail.html")
@@ -188,10 +176,7 @@ def invent(request, showAll):
 @login_required
 @user_passes_test(other_checks)
 def invent_detail(request, inst_id):
-    try:
-        inst = Resource_Inst.objects.get(id=inst_id, inst_owner=request.user)
-    except Resource_Inst.DoesNotExist:
-        raise Http404("Instance does not exist")
+    inst = get_object_or_404(Resource_Inst, id=inst_id, inst_owner=request.user)
 
     if request.method == "POST":
         formType = request.POST['formtype']
