@@ -19,19 +19,20 @@ class Resource_Inst(models.Model):
     last_mod        = models.DateTimeField(auto_now=True)
 
     def finalise(self):
-        #   We need to find all the tickets and update them
-        self.exhausted = True
-        affected_tickets = self.resource_ticket_set.filter(resource_inst=self)
-        for ticket in affected_tickets:
-            ticket.finalise()
-        self.save()
-        return
+        self.set_finalisation(True)
 
     def definalise(self):
-        self.exhausted = False
-        affected_tickets = self.resource_ticket_set.filter(resource_inst=self)
+        self.set_finalisation(False)
+
+    def set_finalisation(self, finalisation):
+        #   We need to find all the tickets and update them
+        self.exhausted = finalisation
+        affected_tickets = self.resource_ticket_set.all()
         for ticket in affected_tickets:
-            ticket.definalise()
+            if finalisation:
+                ticket.finalise()
+            else:
+                ticket.definalise()
         self.save()
         return
 
