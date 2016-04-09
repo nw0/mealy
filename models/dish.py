@@ -14,18 +14,13 @@ class Dish(models.Model):
     cooking_style   = models.CharField(max_length=8, choices=COOKING_STYLES)
     par_meal        = models.ForeignKey(Meal)
     ticket_deps     = models.IntegerField(default=0)
-    open_cost       = models.FloatField(default=0)      #   to be deprecated
 
     def updatePriceDelta(self, delta):
         #   Add the delta to the meal price
-        self.open_cost += delta
-        self.save()
-
         self.par_meal.updatePriceDelta(delta)
 
     def remove_ticket(self, ticket_cost):
         #   Assumes the ticket is open
-        self.open_cost -= ticket_cost
         self.ticket_deps -= 1
         self.save()
 
@@ -35,7 +30,6 @@ class Dish(models.Model):
 
     def add_dep(self, dep_cost):
         self.ticket_deps += 1
-        self.open_cost += dep_cost
         self.save()
 
         self.par_meal.updatePriceDelta(dep_cost)
@@ -44,7 +38,6 @@ class Dish(models.Model):
 
     def reopen_dep(self, dep_cost):
         self.ticket_deps += 1
-        self.open_cost += dep_cost
         self.save()
 
         self.par_meal.reopen_cost(dep_cost)
@@ -53,7 +46,6 @@ class Dish(models.Model):
 
     def close_dep(self, dep_cost):
         self.ticket_deps -= 1
-        self.open_cost -= dep_cost
         self.save()
         self.par_meal.close_cost(dep_cost)
 
