@@ -27,12 +27,8 @@ class Meal(models.Model):
         self.closed_cost = sum([ dish.get_closed_cost() for dish in dishes ])
         self.save()
 
-    def add_dep(self):
-        self.dish_deps += 1
-        self.save()
-
-    def close_dep(self):
-        self.dish_deps -= 1
+    def adjust_dep(self, steps):
+        self.dish_deps += int(steps)
         self.save()
 
     def get_meal_cost(self):

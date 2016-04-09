@@ -26,7 +26,7 @@ class Dish(models.Model):
 
         self.par_meal.updatePriceDelta(-ticket_cost)
         if self.ticket_deps <= 0:
-            self.par_meal.close_dep()
+            self.par_meal.adjust_dep(-1)
 
     def add_dep(self, dep_cost):
         self.ticket_deps += 1
@@ -34,23 +34,22 @@ class Dish(models.Model):
 
         self.par_meal.updatePriceDelta(dep_cost)
         if self.ticket_deps == 1:
-            self.par_meal.add_dep()
-
-    def reopen_dep(self, dep_cost):
-        self.ticket_deps += 1
-        self.save()
-
-        self.par_meal.close_cost(-dep_cost)
-        if self.ticket_deps == 1:
-            self.par_meal.add_dep()
+            self.par_meal.adjust_dep(1)
 
     def close_dep(self, dep_cost):
-        self.ticket_deps -= 1
+        #   Assume that closure will always involve a positive cost
+        #   Then: if dep_cost < 0, this signifies a "re-opening" of costs
+        if dep_cost >= 0:
+            self.ticket_deps -= 1
+
+        if self.ticket_deps == 0:
+            self.par_meal.adjust_dep(-1 if dep_cost >= 0 else 1)
+
+        if dep_cost < 0:
+            self.ticket_deps += 1
+
         self.save()
         self.par_meal.close_cost(dep_cost)
-
-        if self.ticket_deps <= 0:
-            self.par_meal.close_dep()
 
     def get_closed_cost(self):
         tickets = self.resource_ticket_set.filter(par_dish=self, finalised=True)

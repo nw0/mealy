@@ -49,7 +49,7 @@ class Resource_Ticket(models.Model):
     def definalise(self):
         self.finalised = False
         self.save()
-        self.par_dish.reopen_dep(self.ticket_cost)
+        self.par_dish.close_dep(-self.ticket_cost)
 
     def remove(self):
         amt_used = self.used_on_ticket
