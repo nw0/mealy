@@ -12,14 +12,12 @@ class Meal(models.Model):
     )
     cons_time   = models.DateTimeField("time eaten")
     meal_type   = models.CharField(choices=MEAL_TYPES, max_length=10)
-    meal_cost   = models.FloatField(default=0)      #   to be deprecated
     open_cost   = models.FloatField(default=0)
     closed_cost = models.FloatField(default=0)
     dish_deps   = models.IntegerField(default=0)
     meal_owner  = models.ForeignKey(User)
 
     def updatePriceDelta(self, delta):
-        self.meal_cost += delta
         self.open_cost += delta
         self.save()
 
