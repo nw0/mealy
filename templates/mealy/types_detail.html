@@ -2,12 +2,12 @@
 {% load mathfilters %}
 
 {% block content %}
-<p>This is the {{res_name}} category. {% if par %}Its parent is
-  <a href="{% url 'mealy:types_detail' par.r_name %}">{{ par.r_name }}</a> and
+<p>This is the {{ r_type.r_name }} category. {% if r_type.r_parent %}Its parent is
+  <a href="{% url 'mealy:types_detail' r_type.r_parent.r_name %}">{{ r_type.r_parent.r_name }}</a> and
   these{% else %}These{% endif %} are its children:</p>
-{% if type_list %}
+{% if r_type.resource_type_set.count %}
 <ul>
-  {% for tp in type_list %}
+  {% for tp in r_type.resource_type_set.all %}
   <li><a href="{% url 'mealy:types_detail' tp.r_name %}">
     {{ tp.r_name }}</a></li>
   {% endfor %}

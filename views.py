@@ -148,12 +148,8 @@ def types(request):
 @user_passes_test(other_checks)
 def types_detail(request, res_name):
     ex_type = get_object_or_404(Resource_Type, r_name=res_name)
-    #type_list = Resource_Type.objects.filter(r_parent=ex_type)
-    type_list = ex_type.resource_type_set.all()
     template = loader.get_template("mealy/types_detail.html")
-    contDict = {    "res_name": ex_type.r_name,
-                    "type_list": type_list,
-                    "par": ex_type.r_parent if ex_type.r_parent else None
+    contDict = {    "r_type": ex_type,
                 }
     return HttpResponse(template.render(contDict, request))
 
