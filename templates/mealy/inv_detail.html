@@ -11,33 +11,33 @@
   and the best before date is {{inst.best_bef_date}}.</p>
 
 <div class="row">
-<div class="four columns">
-{% if inst.exhausted %}
-<p>This instance is exhausted.</p>
-<form action="{% url 'mealy:inv_detail' inst.id %}" method="post">
-  {% csrf_token %}
-  <input type="hidden" name="formtype" value="finalise" />
-  <input type="hidden" name="finalisation" value="definal" />
-  <input type="submit" value="De-finalise" />
-</form>
-{% else %}
-<p>This instance is not exhausted.</p>
-<form action="{% url 'mealy:inv_detail' inst.id %}" method="post">
-  {% csrf_token %}
-  <input type="hidden" name="formtype" value="finalise" />
-  <input type="hidden" name="finalisation" value="final" />
-  <input type="submit" value="Finalise" />
-</form>
-{% endif %}
+  <div class="four columns">
+    {% if inst.exhausted %}
+    <p>This instance is exhausted.</p>
+    <form action="{% url 'mealy:inv_detail' inst.id %}" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="formtype" value="finalise" />
+      <input type="hidden" name="finalisation" value="definal" />
+      <input type="submit" value="De-finalise" />
+    </form>
+    {% else %}
+    <p>This instance is not exhausted.</p>
+    <form action="{% url 'mealy:inv_detail' inst.id %}" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="formtype" value="finalise" />
+      <input type="hidden" name="finalisation" value="final" />
+      <input type="submit" value="Finalise" />
+    </form>
+    {% endif %}
 
-<h4>Change attributes</h4>
-<form action="{% url 'mealy:inv_detail' inst.id %}" method="post">
-  {% csrf_token %}
-  <input type="hidden" name="formtype" value="attribchange" />
-  {{ attrib_form.as_p }}
-  <input type="submit" />
-</form>
-</div>
+    <h4>Change attributes</h4>
+    <form action="{% url 'mealy:inv_detail' inst.id %}" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="formtype" value="attribchange" />
+      {{ attrib_form.as_p }}
+      <input type="submit" />
+    </form>
+  </div>
 
   <div class="eight columns">
     <h4>Ticket list</h4>
