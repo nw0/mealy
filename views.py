@@ -210,8 +210,12 @@ def invent_detail(request, inst_id):
             raise Http404("We're not sure what form you submitted")
         return HttpResponseRedirect(reverse("mealy:inv_detail", args=[inst.id]))
 
+    tickets = Resource_Ticket.objects.filter(resource_inst=inst).order_by('par_dish')
     template = loader.get_template("mealy/inv_detail.html")
-    contDict = { 'inst': inst, 'attrib_form': InstAttribForm }
+    contDict =  {   'inst':         inst,
+                    'attrib_form':  InstAttribForm,
+                    'tickets':      tickets,
+                }
     return HttpResponse(template.render(contDict, request))
 
 @login_required

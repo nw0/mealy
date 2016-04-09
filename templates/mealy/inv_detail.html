@@ -1,5 +1,6 @@
 {% extends "mealy/base.html" %}
 {% load mathfilters %}
+{% load mealy_extras %}
 
 {% block content %}
 <h4>{{ inst.res_name }}</h4>
@@ -9,6 +10,8 @@
   {{inst.purchase_date}}. We have used {{inst.used_so_far}} units,
   and the best before date is {{inst.best_bef_date}}.</p>
 
+<div class="row">
+<div class="four columns">
 {% if inst.exhausted %}
 <p>This instance is exhausted.</p>
 <form action="{% url 'mealy:inv_detail' inst.id %}" method="post">
@@ -34,4 +37,29 @@
   {{ attrib_form.as_p }}
   <input type="submit" />
 </form>
+</div>
+
+  <div class="eight columns">
+    <h4>Ticket list</h4>
+    <table>
+      <thead>
+        <th>Meal</th>
+        <th>Dish</th>
+        <th>Units</th>
+        <th>Price</th>
+      </thead>
+      <tbody>
+        {% for ticket in tickets %}
+        <tr>
+          <td>{{ ticket.par_dish.par_meal }}</td>
+          <td><a href="{% url 'mealy:dish_detail' ticket.par_dish.id %}">
+            {{ ticket.par_dish }}</a></td>
+          <td>{{ ticket.used_on_ticket }}</td>
+          <td>{{ ticket.ticket_cost|price }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endblock %}
