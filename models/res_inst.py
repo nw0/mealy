@@ -37,13 +37,11 @@ class Resource_Inst(models.Model):
         self.save()
         return
 
-    def update_usage(self, added_units, is_exhausted):
+    def update_usage(self, added_units):
         assert added_units < 0 or not self.exhausted, \
             "Unable to use an exhausted resource"
         if added_units == 0:
             return
-        if not isinstance(is_exhausted, bool):
-            is_exhausted = self.exhausted
         #   We want to:
         #   1. Check the current (units) usage of the resource `inst`
         #   2. Update the usage, taking the fraction of the added usage to
@@ -53,8 +51,6 @@ class Resource_Inst(models.Model):
         self.used_so_far += added_units
         self.refresh_dependent_ticket_prices()
         self.save()
-        if is_exhausted:
-            self.finalise()
         return self.price * added_units / self.used_so_far
 
     def change_name(self, newName):

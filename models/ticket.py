@@ -13,15 +13,14 @@ class TicketManager(models.Manager):
         ticket = self.create(
             resource_inst   = resource_inst,
             used_on_ticket  = used_on_ticket,
-            ticket_cost     = resource_inst.update_usage(
-                                used_on_ticket, resource_exhausted),
+            ticket_cost     = resource_inst.update_usage(used_on_ticket),
             finalised       = resource_exhausted,
             par_dish        = dish
         )
         ticket.save()
         ticket.par_dish.add_dep(ticket.ticket_cost)
-        if ticket.finalised:
-            ticket.par_dish.close_dep(ticket.ticket_cost)
+        if resource_exhausted:
+            resource_inst.finalise()
         return ticket
 
 class Resource_Ticket(models.Model):
@@ -42,6 +41,7 @@ class Resource_Ticket(models.Model):
         self.par_dish.updatePriceDelta(delta)
 
     def finalise(self):
+        #   Do not call this method except through Resource_Inst.finalise()
         #   We need to find the meal and see if it can be finalised
         if not self.finalised:
             self.finalised = True
@@ -59,7 +59,7 @@ class Resource_Ticket(models.Model):
         tcost = self.ticket_cost
         self.delete()
         self.par_dish.remove_ticket(tcost)
-        self.resource_inst.update_usage(-amt_used, self.resource_inst.exhausted)
+        self.resource_inst.update_usage(-amt_used)
 
     def __str__(self):
         return self.resource_inst.res_name
