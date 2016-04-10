@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import loader
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.views import generic
 from django.utils.decorators import method_decorator
 from django.core.exceptions import ValidationError
@@ -236,23 +236,12 @@ def invent_detail(request, inst_id):
 @method_decorator(decs, name='dispatch')
 class NewInst(generic.edit.CreateView):
     form_class  = NewInstForm
+    success_url = reverse_lazy("mealy:inventory")
 
     def form_invalid(self, form):
         raise ValidationError("Invalid form value", code='invalid')
 
     def form_valid(self, form):
-        ni = Resource_Inst(
-            res_name        = form.cleaned_data['res_name'],
-            res_type        = Resource_Type.objects.get(
-                                r_name = form.cleaned_data['res_type']),
-            unit_use_formal = False and form.cleaned_data['use_formal'],
-            units_original  = form.cleaned_data['units_original'],
-            amt_original    = form.cleaned_data['amt_original'],
-            price           = form.cleaned_data['price'],
-            best_before     = form.cleaned_data['best_before'],
-            best_bef_date   = form.cleaned_data['best_bef_date'],
-            purchase_date   = form.cleaned_data['purchase_date'],
-            inst_owner      = self.request.user,
-        )
-        ni.save()
-        return HttpResponseRedirect(reverse("mealy:inventory"))
+        form.instance.inst_owner        = self.request.user
+        form.instance.unit_use_formal   = False
+        return super(NewInst, self).form_valid(form)
