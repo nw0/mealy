@@ -92,12 +92,17 @@ def meal_detail(request, meal_id):
 @login_required
 @user_passes_test(other_checks)
 def meal_new(request):
-    nm = Meal(
-        meal_type   = request.POST["meal_type"],
-        cons_time   = request.POST["meal_date"],
-        meal_owner  = request.user,
-    )
-    nm.save()
+    if request.method == "POST":
+        form = MealForm(request.POST)
+        if form.is_valid():
+            nm = Meal(
+                meal_type   = form.cleaned_data["meal_type"],
+                cons_time   = form.cleaned_data["meal_date"],
+                meal_owner  = request.user,
+            )
+            nm.save()
+        else:
+            raise Http404("Invalid form")
     return HttpResponseRedirect(reverse("mealy:index"))
 
 @login_required
@@ -106,14 +111,13 @@ def add_dish(request, meal_id):
     meal = get_object_or_404(Meal, id=meal_id, meal_owner=request.user)
 
     if request.method == "POST":
-        nd = Dish(cooking_style=request.POST['dish_style'], par_meal=meal)
-        nd.save()
-        return HttpResponseRedirect(
-                        reverse("mealy:meal_detail", args=[meal_id]))
-    else:
-        template    = loader.get_template("mealy/add_dish.html")
-        contDict     = { 'meal': meal, 'dish_form': DishForm }
-        return HttpResponse(template.render(contDict, request))
+        form = DishForm(request.POST)
+        if form.is_valid():
+            nd = Dish(cooking_style=form.cleaned_data['dish_style'], par_meal=meal)
+            nd.save()
+        else:
+            raise Http404("Invalid form")
+    return HttpResponseRedirect(reverse("mealy:meal_detail", args=[meal_id]))
 
 @login_required
 @user_passes_test(other_checks)
@@ -121,19 +125,20 @@ def dish_detail(request, dish_id):
     dish = get_object_or_404(Dish, id=dish_id, par_meal__meal_owner=request.user)
 
     if request.method == "POST":
-        res_inst = Resource_Inst.objects.get(id=request.POST['resource_inst'],
-                                                inst_owner=request.user)
-        uu = float(request.POST['units_used'])
-        exhausted = ('exhausted' in request.POST) and \
-                    (request.POST['exhausted'] == 'on')
-
-        nt = Resource_Ticket.objects.create_ticket(
-                        res_inst, uu, dish, exhausted)
+        form = TicketForm(request.user, request.POST)
+        if form.is_valid():
+            res_inst = form.cleaned_data['resource_inst']
+            uu = float(form.cleaned_data['units_used'])
+            exhausted = form.cleaned_data['exhausted']
+            nt = Resource_Ticket.objects.create_ticket(
+                            res_inst, uu, dish, exhausted)
+        else:
+            raise Http404("Invalid form")
         return HttpResponseRedirect(
                         reverse("mealy:dish_detail", args=[dish.id]))
 
     tickets = Resource_Ticket.objects.filter(par_dish=dish).order_by('id')
-    contDict    = { 'dish': dish, 'ticket_form': TicketForm }
+    contDict    = { 'dish': dish, 'ticket_form': TicketForm(request.user) }
     if len(tickets):
         contDict['tickets'] = tickets
     template    = loader.get_template("mealy/dish_detail.html")
