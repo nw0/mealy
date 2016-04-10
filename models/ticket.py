@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.dispatch import receiver
+from django.db.models import signals
 
 from res_inst import Resource_Inst
 from dish import Dish
@@ -53,12 +55,11 @@ class Resource_Ticket(models.Model):
             self.save()
             self.par_dish.close_dep(-self.ticket_cost)
 
-    def remove(self):
-        amt_used = self.used_on_ticket
-        tcost = self.ticket_cost
-        self.delete()
-        self.par_dish.remove_ticket(tcost)
-        self.resource_inst.update_usage(-amt_used)
-
     def __str__(self):
         return self.resource_inst.res_name
+
+@receiver(signals.post_delete, sender=Resource_Ticket)
+def clean_ticket(sender, **kwargs):
+    ticket = kwargs.get('instance')
+    ticket.par_dish.remove_ticket(ticket.ticket_cost)
+    ticket.resource_inst.update_usage(-ticket.used_on_ticket)

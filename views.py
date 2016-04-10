@@ -214,7 +214,7 @@ def invent_detail(request, inst_id):
             initf = inst.exhausted
             if initf:
                 inst.definalise()
-            ticket.remove()
+            ticket.delete()
             if initf:
                 inst.finalise()
         else:
