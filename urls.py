@@ -14,8 +14,8 @@ urlpatterns = [
             name="meal_new"
         ),
 
-    url (   r'^meal/(?P<meal_id>\d+)/$',
-            views.meal_detail,
+    url (   r'^meal/(?P<pk>\d+)/$',
+            views.MealView.as_view(),
             name="meal_detail"
         ),
 

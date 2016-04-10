@@ -81,15 +81,21 @@ def index(request):
                 }
     return HttpResponse(template.render(contDict, request))
 
-@login_required
-@user_passes_test(other_checks)
-def meal_detail(request, meal_id):
-    meal = get_object_or_404(Meal, id=meal_id, meal_owner=request.user)
+@method_decorator(decs, name='dispatch')
+class MealView(generic.DetailView):
+    template_name       = "mealy/meal_detail.html"
+    context_object_name = "meal"
 
-    dishes      = Dish.objects.filter(par_meal=meal).order_by('id')
-    template    = loader.get_template("mealy/meal_detail.html")
-    contDict    = { 'meal': meal, 'dishes': dishes, 'dish_form': DishForm }
-    return HttpResponse(template.render(contDict, request))
+    def get_queryset(self):
+        return Meal.objects.filter( id=self.kwargs['pk'],
+                                    meal_owner=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super(MealView, self).get_context_data(**kwargs)
+        context['dishes']       = Dish.objects.filter(par_meal=self.object) \
+                                            .order_by('id')
+        context['dish_form']    = DishForm
+        return context
 
 @method_decorator(decs, name='dispatch')
 class NewMeal(generic.edit.CreateView):
