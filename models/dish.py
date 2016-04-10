@@ -54,6 +54,11 @@ class Dish(models.Model):
         tickets = self.resource_ticket_set.filter(finalised=False)
         return sum([ ticket.ticket_cost for ticket in tickets ])
 
+    def refreshDeps(self):
+        self.ticket_deps \
+            = self.resource_ticket_set.filter(finalised=False).count()
+        self.save()
+
     def __str__(self):
         tickets = self.resource_ticket_set.all().order_by('id')
         tCount = tickets.distinct().count()
