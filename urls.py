@@ -62,7 +62,7 @@ urlpatterns = [
         ),
 
     url (   r'^inventory/new/$',
-            views.invent_new_item,
+            views.NewInst.as_view(),
             name="inv_new"
         ),
 

@@ -5,6 +5,7 @@ from django.template import loader
 from django.core.urlresolvers import reverse
 from django.views import generic
 from django.utils.decorators import method_decorator
+from django.core.exceptions import ValidationError
 from .forms import MealForm, DishForm, TicketForm, TicketFormSet, \
                     InstAttribForm, NewInstForm
 import json, datetime, time
@@ -232,27 +233,26 @@ def invent_detail(request, inst_id):
                 }
     return HttpResponse(template.render(contDict, request))
 
-@login_required
-@user_passes_test(other_checks)
-def invent_new_item(request):
-    #   Add a new object
-    if request.method == "POST":
-        form = NewInstForm(request.POST)
-        if form.is_valid():
-            ni = Resource_Inst(
-                res_name        = form.cleaned_data['res_name'],
-                res_type        = Resource_Type.objects.get(
-                                    r_name = form.cleaned_data['res_type']),
-                unit_use_formal = False and form.cleaned_data['use_formal'],
-                units_original  = form.cleaned_data['orig_units'],
-                amt_original    = form.cleaned_data['qty'],
-                price           = form.cleaned_data['price'],
-                best_before     = form.cleaned_data['use_bbf'] == 'bbf',
-                best_bef_date   = form.cleaned_data['bb_date'],
-                purchase_date   = form.cleaned_data['purchase_date'],
-                inst_owner      = request.user,
-            )
-            ni.save()
-        else:
-            raise Http404("Invalid form")
-    return HttpResponseRedirect(reverse("mealy:inventory"))
+@method_decorator(decs, name='dispatch')
+class NewInst(generic.edit.CreateView):
+    form_class  = NewInstForm
+
+    def form_invalid(self, form):
+        raise ValidationError("Invalid form value", code='invalid')
+
+    def form_valid(self, form):
+        ni = Resource_Inst(
+            res_name        = form.cleaned_data['res_name'],
+            res_type        = Resource_Type.objects.get(
+                                r_name = form.cleaned_data['res_type']),
+            unit_use_formal = False and form.cleaned_data['use_formal'],
+            units_original  = form.cleaned_data['units_original'],
+            amt_original    = form.cleaned_data['amt_original'],
+            price           = form.cleaned_data['price'],
+            best_before     = form.cleaned_data['best_before'],
+            best_bef_date   = form.cleaned_data['best_bef_date'],
+            purchase_date   = form.cleaned_data['purchase_date'],
+            inst_owner      = self.request.user,
+        )
+        ni.save()
+        return HttpResponseRedirect(reverse("mealy:inventory"))

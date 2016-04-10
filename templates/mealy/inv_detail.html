@@ -8,7 +8,8 @@
   {{inst.res_type.r_name}}</a>, originally {{inst.amt_original}}
   {{inst.units_original}} and purchased at {{inst.price}}p on
   {{inst.purchase_date}}. We have used {{inst.used_so_far}} units,
-  and the best before date is {{inst.best_bef_date}}.</p>
+  and the {%if inst.best_before%}best before{%else%}<em>expiry</em>{%endif%}
+  date is {{inst.best_bef_date}}.</p>
 
 <div class="row">
   <div class="four columns">

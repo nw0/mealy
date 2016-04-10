@@ -42,32 +42,44 @@ class DishForm(forms.Form):
                         ('instant',     "Microwaved"), ])
     dish_style.widget.attrs.update({'autofocus': 'autofocus'})
 
-class NewInstForm(forms.Form):
-    res_name    = forms.CharField(  label       = "Item name",
-                                    max_length  = 40, )
-    res_type    = forms.ModelChoiceField( label = "Type",
-                                    queryset    = Resource_Type.objects.all(),
-                                    widget      = DatalistWidget,
-                                to_field_name   = 'r_name', )
-    price       = forms.IntegerField(   label   = "Price (pence)",
-                                    min_value   = 0, )
-    orig_units  = forms.CharField(      label   = "Original units",
-                                    max_length  = 6, )
-    qty         = forms.IntegerField(   label   = "Quantity",
-                                    min_value   = 0, )
-    #use_formal  = forms.BooleanField(   label   = "Use formal units",
-    #                                required    = False, )
-    bb_date     = forms.DateTimeField(  label   = "Best before",
-                                    widget      = Html5DateInput(), )
-    use_bbf     = forms.ChoiceField(    label   = "Expiry type",
-                                    widget      = forms.RadioSelect,
-                                    choices     = [ ('bbf', "Best Before"),
-                                                    ('exp', "Expires"), ],
-                                    initial     = 'bbf', )
-    purchase_date   = forms.DateTimeField(label = "Purchase date",
-                                    widget      = Html5DateInput(
-                                                        format='%Y-%m-%d'),
-                                    initial     = datetime.date.today)
+class NewInstForm(forms.ModelForm):
+    res_name        = forms.CharField(
+                            label           = "Item name",
+                            max_length      = 40, )
+    res_type        = forms.ModelChoiceField(
+                            label           = "Type",
+                            queryset        = Resource_Type.objects.all(),
+                            widget          = DatalistWidget,
+                            to_field_name   = 'r_name', )
+    price           = forms.IntegerField(
+                            label           = "Price (pence)",
+                            min_value       = 0, )
+    units_original  = forms.CharField(
+                            label           = "Original units (g, ml)",
+                            max_length      = 6, )
+    amt_original    = forms.IntegerField(
+                            label           = "Quantity",
+                            min_value       = 0, )
+    best_bef_date   = forms.DateTimeField(
+                            label           = "Best before",
+                            widget          = Html5DateInput(), )
+    best_before     = forms.BooleanField(
+                            label           = "Expiry type",
+                            widget          = forms.RadioSelect(choices=
+                                                [   (True, 'Best Before'),
+                                                    (False, 'Expiry') ] ),
+                            initial         = True, )
+    purchase_date   = forms.DateTimeField(
+                            label           = "Purchase date",
+                            widget          = Html5DateInput(format='%Y-%m-%d'),
+                            initial         = datetime.date.today, )
+    class Meta:
+        model       = Resource_Inst
+        exclude     = [ 'inst_owner',
+                        'last_mod',
+                        'unit_use_formal',
+                        'used_so_far',
+                        'exhausted' ]
 
 class TicketForm(forms.Form):
     resource_inst   = forms.ModelChoiceField(
