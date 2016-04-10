@@ -248,8 +248,3 @@ def invent_new_item(request):
         inst_owner      = request.user, )
     ni.save()
     return HttpResponseRedirect(reverse("mealy:inventory"))
-
-@login_required
-@user_passes_test(other_checks)
-def about(request):
-    return render(request, "mealy/about.html")
