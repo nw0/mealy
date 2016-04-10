@@ -119,30 +119,37 @@ def add_dish(request, meal_id):
             raise Http404("Invalid form")
     return HttpResponseRedirect(reverse("mealy:meal_detail", args=[meal_id]))
 
-@login_required
-@user_passes_test(other_checks)
-def dish_detail(request, dish_id):
-    dish = get_object_or_404(Dish, id=dish_id, par_meal__meal_owner=request.user)
+@method_decorator(decs, name='dispatch')
+class DishView(generic.DetailView):
+    template_name       = "mealy/dish_detail.html"
+    context_object_name = "dish"
 
-    if request.method == "POST":
-        form = TicketForm(request.user, request.POST)
+    def get_queryset(self):
+        return Dish.objects.filter( id=self.kwargs['pk'],
+                                    par_meal__meal_owner=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super(DishView, self).get_context_data(**kwargs)
+        context['tickets']  = Resource_Ticket.objects \
+                                .filter(par_dish=self.object).order_by('id')
+        context['tkt_form'] = TicketForm(self.request.user)
+        return context
+
+    def post(self, *args, **kwargs):
+        form = TicketForm(self.request.user, self.request.POST)
+
         if form.is_valid():
-            res_inst = form.cleaned_data['resource_inst']
-            uu = float(form.cleaned_data['units_used'])
-            exhausted = form.cleaned_data['exhausted']
-            nt = Resource_Ticket.objects.create_ticket(
-                            res_inst, uu, dish, exhausted)
+            self.object = self.get_object()
+            res_inst    = form.cleaned_data['resource_inst']
+            uu          = form.cleaned_data['units_used']
+            exhausted   = form.cleaned_data['exhausted']
+            nt          = Resource_Ticket.objects.create_ticket(
+                                        res_inst, uu, self.object, exhausted)
         else:
             raise Http404("Invalid form")
         return HttpResponseRedirect(
-                        reverse("mealy:dish_detail", args=[dish.id]))
+                        reverse("mealy:dish_detail", args=[self.object.id]))
 
-    tickets = Resource_Ticket.objects.filter(par_dish=dish).order_by('id')
-    contDict    = { 'dish': dish, 'ticket_form': TicketForm(request.user) }
-    if len(tickets):
-        contDict['tickets'] = tickets
-    template    = loader.get_template("mealy/dish_detail.html")
-    return HttpResponse(template.render(contDict, request))
 
 @method_decorator(decs, name='dispatch')
 class TypesView(generic.ListView):
@@ -163,7 +170,7 @@ class InventView(generic.ListView):
     context_object_name = "items"
 
     def get_queryset(self):
-        objs = Resource_Inst.objects.filter(inst_owner=self.request.user.id)
+        objs = Resource_Inst.objects.filter(inst_owner=self.request.user)
         if not self.kwargs['showAll']:
             objs = objs.filter(exhausted=False)
         return objs.order_by('res_type', 'purchase_date')

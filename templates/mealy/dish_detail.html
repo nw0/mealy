@@ -29,7 +29,7 @@
   <h4>Add ticket</h4>
   <form action="{% url 'mealy:dish_detail' dish.id %}" method="post">
     {% csrf_token %}
-    {{ ticket_form.as_p }}
+    {{ tkt_form.as_p }}
     <input type="submit" />
   </form>
 </div>

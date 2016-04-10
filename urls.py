@@ -7,7 +7,7 @@ urlpatterns = [
             views.index,
             name="index"
         ),
-        
+
     url (   r'^meal/new/$',
             views.meal_new,
             name="meal_new"
@@ -23,8 +23,8 @@ urlpatterns = [
             name="add_dish"
         ),
 
-    url (   r'^dish/(?P<dish_id>\d+)/$',
-            views.dish_detail,
+    url (   r'^dish/(?P<pk>\d+)/$',
+            views.DishView.as_view(),
             name="dish_detail"
         ),
 
