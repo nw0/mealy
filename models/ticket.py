@@ -61,5 +61,14 @@ class Resource_Ticket(models.Model):
 @receiver(signals.post_delete, sender=Resource_Ticket)
 def clean_ticket(sender, **kwargs):
     ticket = kwargs.get('instance')
+    was_finalised = ticket.finalised
+
+    if was_finalised:
+        ticket.resource_inst.definalise()
+        ticket.par_dish.close_dep(-ticket.ticket_cost)
+
     ticket.par_dish.remove_ticket(ticket.ticket_cost)
     ticket.resource_inst.update_usage(-ticket.used_on_ticket)
+
+    if was_finalised:
+        ticket.resource_inst.finalise()

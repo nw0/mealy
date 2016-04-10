@@ -211,12 +211,7 @@ def invent_detail(request, inst_id):
                                                         resource_inst=inst)
             except Resource_Ticket.DoesNotExist:
                 raise Http404("Invalid ticket")
-            initf = inst.exhausted
-            if initf:
-                inst.definalise()
             ticket.delete()
-            if initf:
-                inst.finalise()
         else:
             raise Http404("We're not sure what form you submitted")
         return HttpResponseRedirect(reverse("mealy:inv_detail", args=[inst.id]))
