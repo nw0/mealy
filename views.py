@@ -91,21 +91,17 @@ def meal_detail(request, meal_id):
     contDict    = { 'meal': meal, 'dishes': dishes, 'dish_form': DishForm }
     return HttpResponse(template.render(contDict, request))
 
-@login_required
-@user_passes_test(other_checks)
-def meal_new(request):
-    if request.method == "POST":
-        form = MealForm(request.POST)
-        if form.is_valid():
-            nm = Meal(
-                meal_type   = form.cleaned_data["meal_type"],
-                cons_time   = form.cleaned_data["meal_date"],
-                meal_owner  = request.user,
-            )
-            nm.save()
-        else:
-            raise Http404("Invalid form")
-    return HttpResponseRedirect(reverse("mealy:index"))
+@method_decorator(decs, name='dispatch')
+class NewMeal(generic.edit.CreateView):
+    form_class  = MealForm
+    success_url = reverse_lazy("mealy:index")
+
+    def form_invalid(self, form):
+        raise ValidationError("Invalid form value", code='invalid')
+
+    def form_valid(self, form):
+        form.instance.meal_owner = self.request.user
+        return super(NewMeal, self).form_valid(form)
 
 @login_required
 @user_passes_test(other_checks)

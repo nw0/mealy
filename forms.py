@@ -26,12 +26,18 @@ class DatalistWidget(forms.Select):
         output.append('</datalist>')
         return mark_safe('\n'.join(output))
 
-class MealForm(forms.Form):
-    meal_date   = forms.DateTimeField(label='Meal date',
-                        initial=datetime.date.today,
-                        widget=Html5DateInput(format='%Y-%m-%d'))
-    meal_type   = forms.ChoiceField(label="Which meal",
-                        choices=[("Lunch", "Lunch"), ("Dinner", "Dinner")])
+class MealForm(forms.ModelForm):
+    cons_time       = forms.DateTimeField(
+                            label   = 'Meal date',
+                            initial = datetime.date.today,
+                            widget  = Html5DateInput(format='%Y-%m-%d'), )
+    meal_type       = forms.ChoiceField(
+                            label   = "Which meal",
+                            choices = Meal.MEAL_TYPES,
+                            initial = "Lunch", )
+    class Meta:
+        model       = Meal
+        fields      = [ 'cons_time', 'meal_type' ]
 
 class DishForm(forms.Form):
     dish_style  = forms.ChoiceField(choices=[
