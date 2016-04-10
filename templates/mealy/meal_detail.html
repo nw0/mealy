@@ -7,10 +7,10 @@
   <h4>{{ meal }}</h4>
   <p>This meal cost {{ meal.get_meal_cost|price }} with
     {{meal.get_dish_deps}} unresolved items.</p>
-  {% if dishes %}
+  {% if meal.dish_set.count %}
   <p>It has these dishes:</p>
   <ol>
-    {% for dish in dishes %}
+    {% for dish in meal.dish_set.all %}
     <li><a href="{% url 'mealy:dish_detail' dish.id %}">
       {{ dish|dish_pretty }}</a> at
       {{ dish.get_closed_cost|price:dish.get_open_cost }} (closed + open) with

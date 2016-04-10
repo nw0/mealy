@@ -92,8 +92,6 @@ class MealView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(MealView, self).get_context_data(**kwargs)
-        context['dishes']       = Dish.objects.filter(par_meal=self.object) \
-                                            .order_by('id')
         context['dish_form']    = DishForm
         return context
 
@@ -135,8 +133,6 @@ class DishView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(DishView, self).get_context_data(**kwargs)
-        context['tickets']  = Resource_Ticket.objects \
-                                .filter(par_dish=self.object).order_by('id')
         context['tkt_form'] = TicketForm(self.request.user)
         return context
 

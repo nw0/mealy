@@ -9,10 +9,10 @@
     <a href="{% url 'mealy:meal_detail' dish.par_meal.id %}">
       {{ dish.par_meal }}</a></p>
 
-  {% if tickets %}
+  {% if dish.resource_ticket_set.count %}
   <p>It has the following tickets allocated to it:</p>
   <ol>
-    {% for ticket in tickets %}
+    {% for ticket in dish.resource_ticket_set.all %}
     <li>Ticket for {{ ticket.used_on_ticket }} of
       {{ ticket.resource_inst.res_name }}
       <a href="{% url 'mealy:inv_detail' ticket.resource_inst.id %}">
