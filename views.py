@@ -103,19 +103,20 @@ class NewMeal(generic.edit.CreateView):
         form.instance.meal_owner = self.request.user
         return super(NewMeal, self).form_valid(form)
 
-@login_required
-@user_passes_test(other_checks)
-def add_dish(request, meal_id):
-    meal = get_object_or_404(Meal, id=meal_id, meal_owner=request.user)
+@method_decorator(decs, name='dispatch')
+class NewDish(generic.edit.CreateView):
+    form_class  = DishForm
 
-    if request.method == "POST":
-        form = DishForm(request.POST)
-        if form.is_valid():
-            nd = Dish(cooking_style=form.cleaned_data['dish_style'], par_meal=meal)
-            nd.save()
-        else:
-            raise Http404("Invalid form")
-    return HttpResponseRedirect(reverse("mealy:meal_detail", args=[meal_id]))
+    def form_invalid(self, form):
+        raise ValidationError("Invalid form value", code='invalid')
+
+    def form_valid(self, form):
+        form.instance.par_meal = Meal.objects.get( id=self.kwargs['meal_id'],
+                                                meal_owner=self.request.user, )
+        return super(NewDish, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse("mealy:meal_detail", args=[self.kwargs['meal_id']])
 
 @method_decorator(decs, name='dispatch')
 class DishView(generic.DetailView):

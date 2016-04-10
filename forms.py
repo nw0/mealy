@@ -39,14 +39,14 @@ class MealForm(forms.ModelForm):
         model       = Meal
         fields      = [ 'cons_time', 'meal_type' ]
 
-class DishForm(forms.Form):
-    dish_style  = forms.ChoiceField(choices=[
-                        ('frying',      "Fried"),
-                        ('boiling',     "Boiled"),
-                        ('baking',      "Baked"),
-                        ('roasting',    "Roasted"),
-                        ('instant',     "Microwaved"), ])
-    dish_style.widget.attrs.update({'autofocus': 'autofocus'})
+class DishForm(forms.ModelForm):
+    cooking_style   = forms.ChoiceField(
+                            label   = "Dish style",
+                            choices = Dish.COOKING_STYLES,
+                            initial = 'frying', )
+    class Meta:
+        model       = Dish
+        fields      = [ 'cooking_style' ]
 
 class NewInstForm(forms.ModelForm):
     res_name        = forms.CharField(

@@ -20,7 +20,7 @@ urlpatterns = [
         ),
 
     url (   r'^meal/(?P<meal_id>\d+)/dish/new/$',
-            views.add_dish,
+            views.NewDish.as_view(),
             name="add_dish"
         ),
 
