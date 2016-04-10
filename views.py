@@ -83,7 +83,6 @@ def index(request):
 
 @method_decorator(decs, name='dispatch')
 class MealView(generic.DetailView):
-    template_name       = "mealy/meal_detail.html"
     context_object_name = "meal"
 
     def get_queryset(self):
@@ -124,7 +123,6 @@ class NewDish(generic.edit.CreateView):
 
 @method_decorator(decs, name='dispatch')
 class DishView(generic.DetailView):
-    template_name       = "mealy/dish_detail.html"
     context_object_name = "dish"
 
     def get_queryset(self):
@@ -154,20 +152,17 @@ class DishView(generic.DetailView):
 
 @method_decorator(decs, name='dispatch')
 class TypesView(generic.ListView):
-    template_name       = "mealy/types.html"
     context_object_name = "type_list"
     queryset            = Resource_Type.objects.order_by('r_parent')
 
 @method_decorator(decs, name='dispatch')
 class TypesDetailView(generic.DetailView):
-    template_name       = "mealy/types_detail.html"
     context_object_name = "r_type"
     slug_field          = "r_name"
     queryset            = Resource_Type.objects.all()
 
 @method_decorator(decs, name='dispatch')
 class InventView(generic.ListView):
-    template_name       = "mealy/inventory.html"
     context_object_name = "items"
 
     def get_queryset(self):
