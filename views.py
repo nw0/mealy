@@ -181,6 +181,20 @@ class InventView(generic.ListView):
         context['showAll']  = self.kwargs['showAll']
         return context
 
+@method_decorator(decs, name='dispatch')
+class DeleteTicket(generic.edit.DeleteView):
+    models              = Resource_Ticket
+
+    def get_queryset(self):
+        return Resource_Ticket.objects.filter( id=self.kwargs['pk'], resource_inst__inst_owner=self.request.user)
+
+    def get(self, *args, **kwargs):
+        return HttpResponseRedirect(reverse("mealy:inv_detail",
+                                    args=[self.get_object().resource_inst.id]))
+
+    def get_success_url(self):
+        return reverse("mealy:inv_detail", args=[self.object.resource_inst.id])
+
 @login_required
 @user_passes_test(other_checks)
 def invent_detail(request, inst_id):
@@ -204,14 +218,6 @@ def invent_detail(request, inst_id):
             inst.change_price(newPrice)
             if initf:
                 inst.finalise()
-        elif formType == "cancelticket":
-            ticketId = int(request.POST['ticketid'])
-            try:
-                ticket = Resource_Ticket.objects.get(id=ticketId,
-                                                        resource_inst=inst)
-            except Resource_Ticket.DoesNotExist:
-                raise Http404("Invalid ticket")
-            ticket.delete()
         else:
             raise Http404("We're not sure what form you submitted")
         return HttpResponseRedirect(reverse("mealy:inv_detail", args=[inst.id]))

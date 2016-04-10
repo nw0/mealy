@@ -57,10 +57,8 @@
             {{ ticket.par_dish }}</a></td>
           <td>{{ ticket.used_on_ticket }}</td>
           <td>{{ ticket.ticket_cost|price }}</td>
-          <td><form action="{% url 'mealy:inv_detail' inst.id %}" method="post">
+          <td><form action="{% url 'mealy:inv_delete_ticket' ticket.id %}" method="post">
             {% csrf_token %}
-            <input type="hidden" name="formtype" value="cancelticket" />
-            <input type="hidden" name="ticketid" value="{{ ticket.id }}" />
             <input type="submit" value="Cancel"/>
           </form></td>
         </tr>

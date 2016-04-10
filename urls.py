@@ -56,6 +56,11 @@ urlpatterns = [
             name="inv_detail"
         ),
 
+    url (   r'^ticket/(?P<pk>\d+)/del/$',
+            views.DeleteTicket.as_view(),
+            name="inv_delete_ticket",
+        ),
+
     url (   r'^inventory/new/$',
             views.invent_new_item,
             name="inv_new"
