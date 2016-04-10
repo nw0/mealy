@@ -63,48 +63,7 @@
 
     <form action="{% url 'mealy:inv_new' %}" method="post">
       {% csrf_token %}
-      <label for="res_name">Resource Name</label>
-      <input type="text" name="res_name" id="res_name" />
-
-      <label for="res_type">Resource Type</label>
-      <input type="text" list="res_type" name="res_type" />
-      <datalist name="res_type" id="res_type">
-        {% for tp in types %}
-        <option value="{{tp.r_name}}" />
-        {% endfor %}
-      </datalist>
-
-      <label for="price">Price (in pence)</label>
-      <input type="text" maxlength="4" name="price" id="price" />
-
-      <label for="orig_units">Units (e.g. ml)</label>
-      <input type="text" maxlength="6" name="orig_units" id="orig_units" />
-
-      <label for="qty">Quantity/Amount</label>
-      <input type="text" maxlength="6" name="qty" id="qty" />
-
-      <label for="use_formal">
-        <input type="checkbox" name="use_formal" id="use_formal" />
-        <span class="label-body">Use formal units</span>
-      </label>
-
-      <label for="bb_date">Best before</label>
-      <input type="date" name="bb_date" id="bb_date" />
-
-      <label for="use_bb">Expiry type</label>
-      <label for="use_bbt">
-        <input type="radio" name="use_bb" id="use_bbt" value="True">
-        <span class="label-body">Best before</span>
-      </label>
-      <label for="use_bbf">
-        <input type="radio" name="use_bb" id="use_bbf" value="False">
-        <span class="label-body">Expires</span>
-      </label>
-
-      <label for="purchase_date">Purchased on</label>
-      <input type="date" name="purchase_date" id="purchase_date" />
-      <br />
-
+      {{ niForm.as_p }}
       <input type="submit" />
     </form>
   </div>
