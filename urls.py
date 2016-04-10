@@ -30,12 +30,12 @@ urlpatterns = [
         ),
 
     url (   r'^types/$',
-            views.TypesView.as_view(),
+            views.TypesOverview.as_view(),
             name="types"
         ),
 
     url (   r'^types/(?P<slug>\w+)/$',
-            views.TypesDetailView.as_view(),
+            views.TypesView.as_view(),
             name="types_detail"
         ),
 

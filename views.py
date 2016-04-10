@@ -151,12 +151,12 @@ class DishView(generic.DetailView):
 
 
 @method_decorator(decs, name='dispatch')
-class TypesView(generic.ListView):
+class TypesOverview(generic.ListView):
     context_object_name = "type_list"
     queryset            = Resource_Type.objects.order_by('r_parent')
 
 @method_decorator(decs, name='dispatch')
-class TypesDetailView(generic.DetailView):
+class TypesView(generic.DetailView):
     context_object_name = "r_type"
     slug_field          = "r_name"
     queryset            = Resource_Type.objects.all()
