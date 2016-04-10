@@ -15,7 +15,7 @@
 {% block content %}
   <div class="eight columns">
     <h4>Inventory</h4>
-    {% if items %}
+    {% if object_list %}
     {% if not showAll %}
     <p>We currently have the following items in our inventory (<a
       href="{% url 'mealy:inventory_all' %}">see all</a>):</p>
@@ -35,7 +35,7 @@
         </tr>
       </thead>
       <tbody>
-        {% for item in items %}
+        {% for item in object_list %}
         <tr>
           <td></td>
           <td><a href="{% url 'mealy:types_detail' item.res_type.r_name %}"

@@ -4,13 +4,13 @@
 
 {% block content %}
 <div class="eight columns">
-  <h4>{{ meal }}</h4>
-  <p>This meal cost {{ meal.get_meal_cost|price }} with
-    {{meal.get_dish_deps}} unresolved items.</p>
-  {% if meal.dish_set.count %}
+  <h4>{{ object }}</h4>
+  <p>This meal cost {{ object.get_meal_cost|price }} with
+    {{object.get_dish_deps}} unresolved items.</p>
+  {% if object.dish_set.count %}
   <p>It has these dishes:</p>
   <ol>
-    {% for dish in meal.dish_set.all %}
+    {% for dish in object.dish_set.all %}
     <li><a href="{% url 'mealy:dish_detail' dish.id %}">
       {{ dish|dish_pretty }}</a> at
       {{ dish.get_closed_cost|price:dish.get_open_cost }} (closed + open) with
@@ -23,7 +23,7 @@
 </div>
 <div class="four columns">
   <h4>Add dish</h4>
-  <form action="{% url 'mealy:add_dish' meal.id %}" method="post">
+  <form action="{% url 'mealy:add_dish' object.id %}" method="post">
     {% csrf_token %}
     {{ dish_form.as_p }}
     <input type="submit" />

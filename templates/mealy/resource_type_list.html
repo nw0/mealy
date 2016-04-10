@@ -2,9 +2,9 @@
 {% load mathfilters %}
 
 {% block content %}
-{% if type_list %}
+{% if object_list %}
 <ul>
-  {% for tp in type_list %}
+  {% for tp in object_list %}
   <li><a href="{% url 'mealy:types_detail' tp.r_name %}">
     {{ tp.r_name }}</a></li>
   {% endfor %}
