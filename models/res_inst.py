@@ -51,7 +51,8 @@ class Resource_Inst(models.Model):
         self.used_so_far += added_units
         self.refresh_dependent_ticket_prices()
         self.save()
-        return self.price * added_units / self.used_so_far
+        return self.price * added_units / self.used_so_far \
+                    if self.used_so_far != 0 else 0
 
     def change_name(self, newName):
         self.res_name = newName
