@@ -65,7 +65,7 @@ class NewInstForm(forms.ModelForm):
     units_original  = forms.CharField(
                             label           = "Original units (g, ml)",
                             max_length      = 6, )
-    amt_original    = forms.IntegerField(
+    amt_original    = forms.FloatField(
                             label           = "Quantity",
                             min_value       = 0, )
     best_bef_date   = forms.DateTimeField(

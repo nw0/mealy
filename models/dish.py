@@ -9,6 +9,7 @@ class Dish(models.Model):
         ('boiling',     "Boiled"),
         ('baking',      "Baked"),
         ('roasting',    "Roasted"),
+        ('uncooked',    "Processed"),
         ('instant',     "Microwaved")
     )
     cooking_style   = models.CharField(max_length=8, choices=COOKING_STYLES)

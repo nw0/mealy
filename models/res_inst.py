@@ -9,7 +9,7 @@ class Resource_Inst(models.Model):
     price           = models.IntegerField()
     unit_use_formal = models.BooleanField(default=False)
     units_original  = models.CharField(max_length=6)
-    amt_original    = models.IntegerField()
+    amt_original    = models.FloatField()
     used_so_far     = models.FloatField(default=0)
     best_bef_date   = models.DateTimeField("best before date")
     best_before     = models.BooleanField(default=False)
