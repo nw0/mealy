@@ -35,6 +35,7 @@ class MealForm(forms.ModelForm):
                             label   = "Which meal",
                             choices = Meal.MEAL_TYPES,
                             initial = "Lunch", )
+    cons_time.widget.attrs.update({'autofocus': 'autofocus'})
     class Meta:
         model       = Meal
         fields      = [ 'cons_time', 'meal_type' ]
@@ -44,6 +45,7 @@ class DishForm(forms.ModelForm):
                             label   = "Dish style",
                             choices = Dish.COOKING_STYLES,
                             initial = 'frying', )
+    cooking_style.widget.attrs.update({'autofocus': 'autofocus'})
     class Meta:
         model       = Dish
         fields      = [ 'cooking_style' ]
@@ -79,6 +81,7 @@ class NewInstForm(forms.ModelForm):
                             label           = "Purchase date",
                             widget          = Html5DateInput(format='%Y-%m-%d'),
                             initial         = datetime.date.today, )
+    res_name.widget.attrs.update({'autofocus': 'autofocus'})
     class Meta:
         model       = Resource_Inst
         exclude     = [ 'inst_owner',
