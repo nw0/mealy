@@ -10,7 +10,7 @@
   {% if object.dish_set.count %}
   <p>It has these dishes:</p>
   <ol>
-    {% for dish in object.dish_set.all %}
+    {% for dish in object.dish_set.all|dictsort:"id" %}
     <li><a href="{% url 'mealy:dish_detail' dish.id %}">
       {{ dish|dish_pretty }}</a> at
       {{ dish.get_closed_cost|price:dish.get_open_cost }} (closed + open) with
