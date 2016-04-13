@@ -5,11 +5,12 @@
 {% block content %}
 <h4>{{ inst.res_name }}</h4>
 <p>This is a <a href="{% url 'mealy:types_detail' inst.res_type.r_name %}">
-  {{inst.res_type.r_name}}</a>, originally {{inst.amt_original}}
-  {{inst.units_original}} and purchased at {{inst.price}}p on
-  {{inst.purchase_date}}. We have used {{inst.used_so_far}} units,
-  and the {%if inst.best_before%}best before{%else%}<em>expiry</em>{%endif%}
-  date is {{inst.best_bef_date}}.</p>
+  {{ inst.res_type.r_name }}</a>. It cost {{ inst.price|price }} for
+  {{ inst.amt_original|floatformat:"-2" }} {{ inst.units_original }}, purchased
+  on {{ inst.purchase_date|date:"M j, Y" }}. You have used
+  {{ inst.used_so_far|floatformat:"-2" }} unit(s), and the
+  {% if inst.best_before %}best before{% else %}<em>expiry</em>{% endif %} date
+  is {{ inst.best_bef_date|date:"M j, Y" }}.</p>
 
 <div class="row">
   <div class="four columns">
