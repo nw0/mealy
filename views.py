@@ -105,6 +105,22 @@ class NewMeal(generic.edit.CreateView):
         return super(NewMeal, self).form_valid(form)
 
 @method_decorator(decs, name='dispatch')
+class DeleteMeal(generic.edit.DeleteView):
+    models              = Meal
+
+    def get_queryset(self):
+        return Meal.objects.filter( id=self.kwargs['pk'],
+                                    meal_owner=self.request.user,
+                                    dish__isnull=True)
+
+    def get(self, *args, **kwargs):
+        return HttpResponseRedirect(reverse("mealy:meal_detail",
+                                    args=[self.get_object().id]))
+
+    def get_success_url(self):
+        return reverse("mealy:index")
+
+@method_decorator(decs, name='dispatch')
 class NewDish(generic.edit.CreateView):
     form_class  = DishForm
 
