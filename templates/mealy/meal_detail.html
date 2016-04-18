@@ -21,7 +21,7 @@
   <p>No dishes</p>
   <form action="{% url 'mealy:meal_delete' object.id %}" method="post">
     {% csrf_token %}
-    <input type="submit" value="Cancel"/>
+    <input type="submit" value="Delete meal"/>
   </form>
   {% endif %}
 </div>
