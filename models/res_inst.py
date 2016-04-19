@@ -80,3 +80,6 @@ class Resource_Inst(models.Model):
 
     def __str__(self):
         return self.res_name + " (" + str(self.id) + ")"
+
+    class Meta:
+        verbose_name        = "resource instance"

@@ -58,6 +58,9 @@ class Resource_Ticket(models.Model):
     def __str__(self):
         return self.resource_inst.res_name
 
+    class Meta:
+        verbose_name    = "resource ticket"
+
 @receiver(signals.post_delete, sender=Resource_Ticket)
 def clean_ticket(sender, **kwargs):
     ticket = kwargs.get('instance')

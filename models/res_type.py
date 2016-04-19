@@ -6,3 +6,6 @@ class Resource_Type(models.Model):
 
     def __str__(self):
         return self.r_name
+
+    class Meta:
+        verbose_name    = "resource type"
