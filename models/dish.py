@@ -66,3 +66,6 @@ class Dish(models.Model):
         if tCount == 0:
             return "%s (empty)" % self.cooking_style
         return "%s %s" % (self.get_cooking_style_display(), tickets[0])
+
+    class Meta:
+        verbose_name_plural = "dishes"
