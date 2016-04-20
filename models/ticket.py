@@ -9,9 +9,9 @@ from dish import Dish
 class TicketManager(models.Manager):
     def create_ticket(self, resource_inst, used_on_ticket, dish,
         resource_exhausted=False):
-        #   Reject the ticket if used is 0
-        if used_on_ticket <= 0:
-            return False
+        assert used_on_ticket > 0, "Units used must be positive"
+        assert not resource_inst.exhausted, "Resource must not be exhausted"
+
         ticket = self.create(
             resource_inst   = resource_inst,
             used_on_ticket  = used_on_ticket,
