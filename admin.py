@@ -3,7 +3,6 @@ from django.contrib import admin
 # Register your models here.
 from .models import Resource_Inst, Resource_Ticket, Resource_Type, Meal, Dish
 admin.site.register(Resource_Type)
-admin.site.register(Resource_Inst)
 admin.site.register(Resource_Ticket)
 
 @admin.register(Meal)
@@ -14,6 +13,10 @@ class MealAdmin(admin.ModelAdmin):
 @admin.register(Dish)
 class DishAdmin(admin.ModelAdmin):
     list_filter     = ('par_meal__meal_owner', 'cooking_style')
+
+@admin.register(Resource_Inst)
+class InstAdmin(admin.ModelAdmin):
+    list_filter     = ('inst_owner', 'exhausted', 'units_original', 'res_type')
 
 def other_checks(user):
     #   Use this function for checks which the user must pass to use Mealy
