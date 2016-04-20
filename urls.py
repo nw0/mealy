@@ -29,6 +29,11 @@ urlpatterns = [
             name="add_dish"
         ),
 
+    url (   r'^dish/(?P<pk>\d+)/del/$',
+            views.DeleteDish.as_view(),
+            name="dish_delete"
+        ),
+
     url (   r'^dish/(?P<pk>\d+)/$',
             views.DishView.as_view(),
             name="dish_detail"

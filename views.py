@@ -136,6 +136,22 @@ class NewDish(generic.edit.CreateView):
         return reverse("mealy:meal_detail", args=[self.kwargs['meal_id']])
 
 @method_decorator(decs, name='dispatch')
+class DeleteDish(generic.edit.DeleteView):
+    models              = Dish
+
+    def get_queryset(self):
+        return Dish.objects.filter( id=self.kwargs['pk'],
+                                    par_meal__meal_owner=self.request.user,
+                                    resource_ticket__isnull=True)
+
+    def get(self, *args, **kwargs):
+        return HttpResponseRedirect(reverse("mealy:dish_detail",
+                                    args=[self.get_object().id]))
+
+    def get_success_url(self):
+        return reverse("mealy:meal_detail", args=[self.object.par_meal.id])
+
+@method_decorator(decs, name='dispatch')
 class DishView(generic.DetailView):
     def get_queryset(self):
         return Dish.objects.filter( id=self.kwargs['pk'],
