@@ -61,7 +61,7 @@ class Dish(models.Model):
         self.save()
 
     def __str__(self):
-        tickets = self.resource_ticket_set.all().order_by('id')
+        tickets = self.resource_ticket_set.all().order_by('-ticket_cost')
         tCount = tickets.distinct().count()
         if tCount == 0:
             return "%s (empty)" % self.cooking_style
