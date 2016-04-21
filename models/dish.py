@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import Sum, Value
+from django.db.models.functions import Coalesce
 from django.contrib.auth.models import User
 
 from meal import Meal
@@ -46,11 +48,11 @@ class Dish(models.Model):
 
     def get_closed_cost(self):
         tickets = self.resource_ticket_set.filter(finalised=True)
-        return sum([ ticket.ticket_cost for ticket in tickets ])
+        return tickets.aggregate(c=Coalesce(Sum('ticket_cost'), Value(0)))['c']
 
     def get_open_cost(self):
         tickets = self.resource_ticket_set.filter(finalised=False)
-        return sum([ ticket.ticket_cost for ticket in tickets ])
+        return tickets.aggregate(c=Coalesce(Sum('ticket_cost'), Value(0)))['c']
 
     def refreshDeps(self):
         self.ticket_deps \
