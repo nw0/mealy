@@ -18,22 +18,19 @@ class Dish(models.Model):
 
     def updatePriceDelta(self, delta):
         assert self.ticket_deps > 0, "Dish has no open tickets"
-        #   Add the delta to the meal price
         self.par_meal.openCostsDelta(delta)
 
     def remove_ticket(self, ticket_cost):
         assert self.ticket_deps > 0, "Dish has no open tickets"
-        #   Assumes the ticket is open
+        self.updatePriceDelta(-ticket_cost)
         self.ticket_deps -= 1
         self.save()
-
-        self.par_meal.openCostsDelta(-ticket_cost)
 
     def add_dep(self, dep_cost):
         self.ticket_deps += 1
         self.save()
 
-        self.par_meal.openCostsDelta(dep_cost)
+        self.updatePriceDelta(dep_cost)
 
     def close_dep(self, dep_cost):
         #   Assume that closure will always involve a positive cost
@@ -62,8 +59,7 @@ class Dish(models.Model):
 
     def __str__(self):
         tickets = self.resource_ticket_set.all().order_by('-ticket_cost')
-        tCount = tickets.distinct().count()
-        if tCount == 0:
+        if tickets.distinct().count() == 0:
             return "%s (empty)" % self.cooking_style
         return "%s %s" % (self.get_cooking_style_display(), tickets[0])
 
