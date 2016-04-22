@@ -1,0 +1,14 @@
+{% extends "mealy/base.html" %}
+{% load mathfilters %}
+
+{% block links %}
+<ul>
+  <li><a href="{% url 'mealy:index' %}">Main</a></li>
+  <li><a href="{% url 'mealy:inventory' %}">Inventory</a></li>
+  <li><a href="{% url 'mealy:std_insts' %}">Standard Items</a></li>
+</ul>
+{% endblock links %}
+
+{% block content %}
+<p>This is the <em>{{ object.inst_name }}</em> standard instance.</p>
+{% endblock content %}

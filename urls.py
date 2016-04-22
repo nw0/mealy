@@ -49,6 +49,16 @@ urlpatterns = [
             name="types_detail"
         ),
 
+    url (   r'^instances/$',
+            views.StdInstListView.as_view(),
+            name="std_insts"
+        ),
+
+    url (   r'^instances/(?P<pk>\d+)/$',
+            views.StdInstDetailView.as_view(),
+            name="std_inst_detail"
+        ),
+
     url (   r'^inventory/$',
             views.InventView.as_view(),
             name="inventory",

@@ -11,7 +11,7 @@ from .forms import MealForm, DishForm, TicketForm, TicketFormSet, \
 import json, datetime, time
 
 from .models import Resource_Type, Resource_Inst, Resource_Ticket, \
-                TicketManager, Meal, Dish
+                TicketManager, Meal, Dish, Standard_Inst
 from .admin import other_checks
 # Create your views here.
 
@@ -186,6 +186,14 @@ class TypesOverview(generic.ListView):
 class TypesView(generic.DetailView):
     slug_field          = "r_name"
     queryset            = Resource_Type.objects.all()
+
+@method_decorator(decs, name='dispatch')
+class StdInstListView(generic.ListView):
+    queryset            = Standard_Inst.objects.order_by('inst_type')
+
+@method_decorator(decs, name='dispatch')
+class StdInstDetailView(generic.DetailView):
+    queryset            = Standard_Inst.objects.all()
 
 @method_decorator(decs, name='dispatch')
 class InventView(generic.ListView):
