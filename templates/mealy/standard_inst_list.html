@@ -1,14 +1,35 @@
 {% extends "mealy/base.html" %}
 {% load mathfilters %}
+{% load mealy_extras %}
 
 {% block content %}
+<h4>Standard Instances</h4>
+<p>Standard instances are...</p>
+
 {% if object_list %}
-<ul>
-  {% for object in object_list %}
-  <li><a href="{% url 'mealy:std_inst_detail' object.id %}">
-    {{ object.inst_name }}</a></li>
-  {% endfor %}
-</ul>
+<table class="u-full-width invent">
+  <thead>
+    <tr>
+      <th>&#8470;</th>
+      <th>Type</th>
+      <th>Name</th>
+      <th>Amount</th>
+      <th>Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for object in object_list %}
+    <tr>
+      <td></td>
+      <td><a href="{% url 'mealy:types_detail' object.inst_type.r_name %}">
+        {{ object.inst_type.r_name }}</a></td>
+      <td>{{ object.inst_name }}</td>
+      <td>{{ object.orig_amt }} {{ object.orig_units }}</td>
+      <td>{{ object.usual_price|price }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% else %}
 <p>No standard instances exist.</p>
 {% endif %}
