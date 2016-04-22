@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Resource_Inst, Resource_Ticket, Resource_Type, Meal, Dish
+from .models import Resource_Inst, Resource_Ticket, Resource_Type, Meal, Dish, \
+                    Standard_Inst
 admin.site.register(Resource_Type)
 admin.site.register(Resource_Ticket)
 
@@ -17,6 +18,10 @@ class DishAdmin(admin.ModelAdmin):
 @admin.register(Resource_Inst)
 class InstAdmin(admin.ModelAdmin):
     list_filter     = ('inst_owner', 'exhausted', 'units_original', 'res_type')
+
+@admin.register(Standard_Inst)
+class StandardInstAdmin(admin.ModelAdmin):
+    list_filter     = ('inst_type', 'orig_units')
 
 def other_checks(user):
     #   Use this function for checks which the user must pass to use Mealy
