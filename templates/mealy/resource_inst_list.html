@@ -66,5 +66,12 @@
       {{ niForm.as_p }}
       <input type="submit" />
     </form>
+
+    <h4>Add standard item</h4>
+    <form action="{% url 'mealy:inv_new_std' %}" method="post">
+      {% csrf_token %}
+      {{ nisForm.as_p }}
+      <input type="submit" />
+    </form>
   </div>
   {% endblock content %}

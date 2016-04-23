@@ -86,6 +86,11 @@ urlpatterns = [
             name="inv_new"
         ),
 
+    url (   r'^inventory/new_std/$',
+            views.NewInstStd.as_view(),
+            name="inv_new_std"
+        ),
+
     url (   r'^about/$',
             TemplateView.as_view(template_name="mealy/about.html"),
             name="about"

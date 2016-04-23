@@ -7,7 +7,7 @@ from django.views import generic
 from django.utils.decorators import method_decorator
 from django.core.exceptions import ValidationError
 from .forms import MealForm, DishForm, TicketForm, TicketFormSet, \
-                    InstAttribForm, NewInstForm
+                    InstAttribForm, NewInstForm, NewInstStdForm
 import json, datetime, time
 
 from .models import Resource_Type, Resource_Inst, Resource_Ticket, \
@@ -208,6 +208,7 @@ class InventView(generic.ListView):
         context['types']    = Resource_Type.objects.all()
         context['showAll']  = self.kwargs['showAll']
         context['niForm']   = NewInstForm
+        context['nisForm']  = NewInstStdForm
         return context
 
 @method_decorator(decs, name='dispatch')
@@ -271,3 +272,21 @@ class NewInst(generic.edit.CreateView):
         form.instance.inst_owner        = self.request.user
         form.instance.unit_use_formal   = False
         return super(NewInst, self).form_valid(form)
+
+@method_decorator(decs, name='dispatch')
+class NewInstStd(generic.edit.CreateView):
+    form_class  = NewInstStdForm
+    success_url = reverse_lazy("mealy:inventory")
+
+    def form_invalid(self, form):
+        raise ValidationError("Invalid form value", code='invalid')
+
+    def form_valid(self, form):
+        form.instance.inst_owner        = self.request.user
+        form.instance.unit_use_formal   = False
+        form.instance.res_name          = form.cleaned_data['std_inst'].inst_name
+        form.instance.res_type          = form.cleaned_data['std_inst'].inst_type
+        form.instance.units_original    = form.cleaned_data['std_inst'].orig_units
+        form.instance.amt_original      = form.cleaned_data['std_inst'].orig_amt
+        form.instance.best_before       = form.cleaned_data['std_inst'].use_bestbef
+        return super(NewInstStd, self).form_valid(form)
