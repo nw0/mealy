@@ -12,7 +12,7 @@ class Resource_Inst(models.Model):
     amt_original    = models.FloatField()
     used_so_far     = models.FloatField(default=0)
     best_bef_date   = models.DateTimeField("best before date")
-    best_before     = models.BooleanField(default=False)
+    best_before     = models.BooleanField(default=True)
     purchase_date   = models.DateTimeField("purchase date")
     exhausted       = models.BooleanField(default=False)
     inst_owner      = models.ForeignKey(User)

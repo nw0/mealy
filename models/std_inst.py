@@ -7,6 +7,7 @@ class Standard_Inst(models.Model):
     inst_type   = models.ForeignKey(Resource_Type)
     usual_price = models.FloatField()
     use_formal  = models.BooleanField(default=False)
+    use_bestbef = models.BooleanField(default=True)
     orig_units  = models.CharField(max_length=6)
     orig_amt    = models.FloatField()
 
