@@ -7,7 +7,7 @@ from django.utils.safestring import mark_safe
 from django.forms.utils import flatatt
 
 import datetime
-from .models import Resource_Type, Resource_Inst, Meal, Dish
+from .models import Resource_Type, Resource_Inst, Meal, Dish, Standard_Inst
 
 class Html5DateInput(forms.DateInput):
     input_type = 'date'
@@ -89,6 +89,30 @@ class NewInstForm(forms.ModelForm):
                         'unit_use_formal',
                         'used_so_far',
                         'exhausted' ]
+
+class NewInstStdForm(forms.ModelForm):
+    std_inst        = forms.ModelChoiceField(
+                            label           = "Standard instance",
+                            queryset        = Standard_Inst.objects.all(),
+                            to_field_name   = 'inst_name',
+                            )
+    price           = forms.IntegerField(
+                            label           = "Price (pence)",
+                            min_value       = 0, )
+    best_bef_date   = forms.DateTimeField(
+                            label           = "Best before",
+                            widget          = Html5DateInput(), )
+    purchase_date   = forms.DateTimeField(
+                            label           = "Purchase date",
+                            widget          = Html5DateInput(format='%Y-%m-%d'),
+                            initial         = datetime.date.today, )
+
+    class Meta:
+        model       = Resource_Inst
+        fields      = [ 'std_inst',
+                        'price',
+                        'best_bef_date',
+                        'purchase_date' ]
 
 class TicketForm(forms.Form):
     resource_inst   = forms.ModelChoiceField(
