@@ -94,7 +94,6 @@ class NewInstStdForm(forms.ModelForm):
     std_inst        = forms.ModelChoiceField(
                             label           = "Standard instance",
                             queryset        = Standard_Inst.objects.all(),
-                            to_field_name   = 'inst_name',
                             )
     price           = forms.IntegerField(
                             label           = "Price (pence)",

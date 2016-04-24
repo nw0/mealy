@@ -76,6 +76,11 @@ urlpatterns = [
             name="inv_detail"
         ),
 
+    url (   r'^standard_instance/$',
+            views.getStandardInst,
+            name="std_inst_raw"
+        ),
+
     url (   r'^ticket/(?P<pk>\d+)/del/$',
             views.DeleteTicket.as_view(),
             name="inv_delete_ticket",

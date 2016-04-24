@@ -290,3 +290,9 @@ class NewInstStd(generic.edit.CreateView):
         form.instance.amt_original      = form.cleaned_data['std_inst'].orig_amt
         form.instance.best_before       = form.cleaned_data['std_inst'].use_bestbef
         return super(NewInstStd, self).form_valid(form)
+
+@login_required
+@user_passes_test(other_checks)
+def getStandardInst(request):
+    inst = get_object_or_404(Standard_Inst, id=request.GET['id'])
+    return HttpResponse(inst)

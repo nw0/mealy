@@ -4,6 +4,20 @@
 
 {% block title %}Mealy - Inventory{% endblock title %}
 
+{% block scripts %}
+<script type="text/javascript">
+  //<![CDATA[
+  $(window).load(function(){
+    $('select').on('change', function(e){
+      $.get("{% url 'mealy:std_inst_raw' %}?id=" + $('option:selected', this).val(), function(data){
+        document.getElementById("textbox1").textContent = data;
+      });
+      e.preventDefault();
+    });
+  });//]]>
+</script>
+{% endblock %}
+
 {% block links %}
 <ul>
   <li><a href="{% url 'mealy:index' %}">Main</a></li>
@@ -70,6 +84,7 @@
     <h4>Add standard item</h4>
     <form action="{% url 'mealy:inv_new_std' %}" method="post">
       {% csrf_token %}
+      <p>Item description: <span id="textbox1">(select an item)</span></p>
       {{ nisForm.as_p }}
       <input type="submit" />
     </form>
