@@ -295,4 +295,4 @@ class NewInstStd(generic.edit.CreateView):
 @user_passes_test(other_checks)
 def getStandardInst(request):
     inst = get_object_or_404(Standard_Inst, id=request.GET['id'])
-    return HttpResponse(inst)
+    return HttpResponse(inst.show_fields())
