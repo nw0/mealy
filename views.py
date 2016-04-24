@@ -208,7 +208,7 @@ class InventView(generic.ListView):
         context['types']    = Resource_Type.objects.all()
         context['showAll']  = self.kwargs['showAll']
         context['niForm']   = NewInstForm
-        context['nisForm']  = NewInstStdForm
+        context['nisForm']  = NewInstStdForm(auto_id='newstdinstform_%s')
         return context
 
 @method_decorator(decs, name='dispatch')

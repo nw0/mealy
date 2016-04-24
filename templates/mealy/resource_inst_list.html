@@ -8,10 +8,15 @@
 <script type="text/javascript">
   //<![CDATA[
   $(window).load(function(){
-    $('select').on('change', function(e){
-      $.get("{% url 'mealy:std_inst_raw' %}?id=" + $('option:selected', this).val(), function(data){
-        document.getElementById("textbox1").textContent = data;
-      });
+    $('#{{ nisForm.std_inst.auto_id }}').on('change', function(e){
+      $.get(  "{% url 'mealy:std_inst_raw' %}?id=" + $(this).val(),
+              function(data){
+                data = jQuery.parseJSON(data)
+                document.getElementById("item_desc").textContent =
+                  data.inst_type + ": " + data.inst_name + " (" + data.orig_amt
+                  + " " + data.orig_units + ")";
+                $('#{{ nisForm.price.auto_id }}').val(data.usual_price)
+              });
       e.preventDefault();
     });
   });//]]>
@@ -84,7 +89,7 @@
     <h4>Add standard item</h4>
     <form action="{% url 'mealy:inv_new_std' %}" method="post">
       {% csrf_token %}
-      <p>Item description: <span id="textbox1">(select an item)</span></p>
+      <p>Item description: <span id="item_desc">(select an item)</span></p>
       {{ nisForm.as_p }}
       <input type="submit" />
     </form>
