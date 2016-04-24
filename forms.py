@@ -81,7 +81,7 @@ class NewInstForm(forms.ModelForm):
                             label           = "Purchase date",
                             widget          = Html5DateInput(format='%Y-%m-%d'),
                             initial         = datetime.date.today, )
-    res_name.widget.attrs.update({'autofocus': 'autofocus'})
+
     class Meta:
         model       = Resource_Inst
         exclude     = [ 'inst_owner',
@@ -105,6 +105,7 @@ class NewInstStdForm(forms.ModelForm):
                             label           = "Purchase date",
                             widget          = Html5DateInput(format='%Y-%m-%d'),
                             initial         = datetime.date.today, )
+    std_inst.widget.attrs.update({'autofocus': 'autofocus'})
 
     class Meta:
         model       = Resource_Inst

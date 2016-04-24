@@ -9,14 +9,19 @@
   //<![CDATA[
   $(window).load(function(){
     $('#{{ nisForm.std_inst.auto_id }}').on('change', function(e){
-      $.get(  "{% url 'mealy:std_inst_raw' %}?id=" + $(this).val(),
-              function(data){
-                data = jQuery.parseJSON(data)
-                document.getElementById("item_desc").textContent =
-                  data.inst_type + ": " + data.inst_name + " (" + data.orig_amt
-                  + " " + data.orig_units + ")";
-                $('#{{ nisForm.price.auto_id }}').val(data.usual_price)
-              });
+      if ($(this).val()){
+        $.get(  "{% url 'mealy:std_inst_raw' %}?id=" + $(this).val(),
+                function(data){
+                  data = jQuery.parseJSON(data)
+                  document.getElementById("item_desc").textContent =
+                    data.inst_name + " " + data.orig_amt + " " + data.orig_units
+                     + " (" + data.inst_type + ")";
+                  $('#{{ nisForm.price.auto_id }}').val(data.usual_price)
+                });
+      } else {
+        document.getElementById("item_desc").textContent = "(select an item)";
+        $('#{{ nisForm.price.auto_id }}').val(0)
+      }
       e.preventDefault();
     });
   });//]]>
@@ -28,6 +33,7 @@
   <li><a href="{% url 'mealy:index' %}">Main</a></li>
   <li><a href="{% url 'mealy:inventory' %}">Inventory</a></li>
   <li><a href="{% url 'mealy:types' %}">Types</a></li>
+  <li><a href="{% url 'mealy:std_insts' %}">Standard Instances</a></li>
 </ul>
 {% endblock links %}
 
@@ -77,20 +83,22 @@
   </div>
 
   <div class="four columns">
+    <h4>Add standard item</h4>
+    <form action="{% url 'mealy:inv_new_std' %}" method="post">
+      {% csrf_token %}
+      <p>Selected instance:<br>
+        <span id="item_desc">(select an item)</span></p>
+      {{ nisForm.as_p }}
+      <input type="submit" />
+    </form>
+    <hr>
+
     <h4>Add items</h4>
     {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
     <form action="{% url 'mealy:inv_new' %}" method="post">
       {% csrf_token %}
       {{ niForm.as_p }}
-      <input type="submit" />
-    </form>
-
-    <h4>Add standard item</h4>
-    <form action="{% url 'mealy:inv_new_std' %}" method="post">
-      {% csrf_token %}
-      <p>Item description: <span id="item_desc">(select an item)</span></p>
-      {{ nisForm.as_p }}
       <input type="submit" />
     </form>
   </div>
