@@ -16,7 +16,7 @@ class Resource_Inst(models.Model):
     res_type        = models.ForeignKey(Resource_Type)
     price           = models.IntegerField()
     unit_use_formal = models.BooleanField(default=False)
-    orig_unit       = models.ForeignKey(Unit, null=True)
+    orig_unit       = models.ForeignKey(Unit)
     amt_original    = models.FloatField()
     used_so_far     = models.FloatField(default=0)
     best_bef_date   = models.DateTimeField("best before date")

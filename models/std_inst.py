@@ -2,6 +2,7 @@ from django.db import models
 import json
 
 from res_type import Resource_Type
+from res_inst import Unit
 
 class Standard_Inst(models.Model):
     inst_name   = models.CharField(max_length=40)
@@ -9,7 +10,7 @@ class Standard_Inst(models.Model):
     usual_price = models.FloatField()
     use_formal  = models.BooleanField(default=False)
     use_bestbef = models.BooleanField(default=True)
-    orig_units  = models.CharField(max_length=6)
+    orig_unit   = models.ForeignKey(Unit)
     orig_amt    = models.FloatField()
 
     def show_fields(self):
@@ -17,7 +18,7 @@ class Standard_Inst(models.Model):
                             'inst_type':    self.inst_type.__str__(),
                             'usual_price':  self.usual_price,
                             'orig_amt':     self.orig_amt,
-                            'orig_units':   self.orig_units,
+                            'orig_units':   self.orig_unit.__str__(),
                             })
 
     def __str__(self):

@@ -22,7 +22,7 @@ class InstAdmin(admin.ModelAdmin):
 
 @admin.register(Standard_Inst)
 class StandardInstAdmin(admin.ModelAdmin):
-    list_filter     = ('inst_type', 'orig_units')
+    list_filter     = ('inst_type', 'orig_unit')
 
 def other_checks(user):
     #   Use this function for checks which the user must pass to use Mealy
