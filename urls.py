@@ -76,6 +76,11 @@ urlpatterns = [
             name="inv_detail"
         ),
 
+    url (   r'^inventory/(?P<pk>\d+)/del/$',
+            views.DeleteInst.as_view(),
+            name="inst_delete"
+        ),
+
     url (   r'^standard_instance/$',
             views.getStandardInst,
             name="std_inst_raw"

@@ -274,6 +274,20 @@ class NewInst(generic.edit.CreateView):
         return super(NewInst, self).form_valid(form)
 
 @method_decorator(decs, name='dispatch')
+class DeleteInst(generic.edit.DeleteView):
+    models              = Resource_Inst
+    success_url = reverse_lazy("mealy:inventory")
+
+    def get_queryset(self):
+        return Resource_Inst.objects.filter( id=self.kwargs['pk'],
+                                    inst_owner=self.request.user,
+                                    resource_ticket__isnull=True)
+
+    def get(self, *args, **kwargs):
+        return HttpResponseRedirect(reverse("mealy:invent_detail",
+                                    args=[self.get_object().id]))
+
+@method_decorator(decs, name='dispatch')
 class NewInstStd(generic.edit.CreateView):
     form_class  = NewInstStdForm
     success_url = reverse_lazy("mealy:inventory")

@@ -42,6 +42,7 @@
   </div>
 
   <div class="eight columns">
+    {% if tickets %}
     <h4>Ticket list</h4>
     <table>
       <thead>
@@ -67,6 +68,14 @@
         {% endfor %}
       </tbody>
     </table>
+    {% else %}
+    <h4>No tickets</h4>
+    <p>This instance hasn't been used yet.</p>
+    <form action="{% url 'mealy:inst_delete' inst.id %}" method="post">
+      {% csrf_token %}
+      <input type="submit" value="Delete Instance" />
+    </form>
+    {% endif %}
   </div>
 </div>
 {% endblock %}
