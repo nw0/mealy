@@ -286,7 +286,7 @@ class NewInstStd(generic.edit.CreateView):
         form.instance.unit_use_formal   = False
         form.instance.res_name          = form.cleaned_data['std_inst'].inst_name
         form.instance.res_type          = form.cleaned_data['std_inst'].inst_type
-        form.instance.units_original    = form.cleaned_data['std_inst'].orig_units
+        form.instance.orig_unit         = form.cleaned_data['std_inst'].orig_units
         form.instance.amt_original      = form.cleaned_data['std_inst'].orig_amt
         form.instance.best_before       = form.cleaned_data['std_inst'].use_bestbef
         return super(NewInstStd, self).form_valid(form)

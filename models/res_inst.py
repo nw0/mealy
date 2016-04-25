@@ -3,12 +3,20 @@ from django.contrib.auth.models import User
 
 from res_type import Resource_Type
 
+class Unit(models.Model):
+    shortcode       = models.CharField(max_length=8)
+    verbose_name    = models.CharField(max_length=20)
+    verbose_plural  = models.CharField(max_length=20)
+
+    def __str__(self):
+        return "%s (%s)" % (self.verbose_plural, self.shortcode)
+
 class Resource_Inst(models.Model):
     res_name        = models.CharField(max_length=40)
     res_type        = models.ForeignKey(Resource_Type)
     price           = models.IntegerField()
     unit_use_formal = models.BooleanField(default=False)
-    units_original  = models.CharField(max_length=6)
+    orig_unit       = models.ForeignKey(Unit, null=True)
     amt_original    = models.FloatField()
     used_so_far     = models.FloatField(default=0)
     best_bef_date   = models.DateTimeField("best before date")

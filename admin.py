@@ -2,9 +2,10 @@ from django.contrib import admin
 
 # Register your models here.
 from .models import Resource_Inst, Resource_Ticket, Resource_Type, Meal, Dish, \
-                    Standard_Inst
+                    Standard_Inst, Unit
 admin.site.register(Resource_Type)
 admin.site.register(Resource_Ticket)
+admin.site.register(Unit)
 
 @admin.register(Meal)
 class MealAdmin(admin.ModelAdmin):
@@ -17,7 +18,7 @@ class DishAdmin(admin.ModelAdmin):
 
 @admin.register(Resource_Inst)
 class InstAdmin(admin.ModelAdmin):
-    list_filter     = ('inst_owner', 'exhausted', 'units_original', 'res_type')
+    list_filter     = ('inst_owner', 'exhausted', 'orig_unit', 'res_type')
 
 @admin.register(Standard_Inst)
 class StandardInstAdmin(admin.ModelAdmin):

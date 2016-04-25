@@ -6,7 +6,7 @@
 <h4>{{ inst.res_name }}</h4>
 <p>This is a <a href="{% url 'mealy:types_detail' inst.res_type.r_name %}">
   {{ inst.res_type.r_name }}</a>. It cost {{ inst.price|price }} for
-  {{ inst.amt_original|floatformat:"-2" }} {{ inst.units_original }}, purchased
+  {{ inst.amt_original|floatformat:"-2" }} {{ inst.orig_unit }}, purchased
   on {{ inst.purchase_date|date:"M j, Y" }}. You have used
   {{ inst.used_so_far|floatformat:"-2" }} unit(s), and the
   {% if inst.best_before %}best before{% else %}<em>expiry</em>{% endif %} date
