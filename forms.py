@@ -7,7 +7,8 @@ from django.utils.safestring import mark_safe
 from django.forms.utils import flatatt
 
 import datetime
-from .models import Resource_Type, Resource_Inst, Meal, Dish, Standard_Inst
+from .models import Resource_Type, Resource_Inst, Meal, Dish, Standard_Inst, \
+                    Unit
 
 class Html5DateInput(forms.DateInput):
     input_type = 'date'
@@ -62,9 +63,9 @@ class NewInstForm(forms.ModelForm):
     price           = forms.IntegerField(
                             label           = "Price (pence)",
                             min_value       = 0, )
-    units_original  = forms.CharField(
-                            label           = "Original units (g, ml)",
-                            max_length      = 6, )
+    orig_unit       = forms.ModelChoiceField(
+                            label           = "Units",
+                            queryset        = Unit.objects.all(), )
     amt_original    = forms.FloatField(
                             label           = "Quantity",
                             min_value       = 0, )
