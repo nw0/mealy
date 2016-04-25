@@ -67,7 +67,7 @@
             >{{ item.res_type.r_name }}</a></td>
           <td><a href="{% url 'mealy:inv_detail' item.id %}">
             {{ item.res_name }}</a> {{ item.amt_original }}
-            {{ item.orig_unit }}</td>
+            {{ item.orig_unit.shortcode }}</td>
           <td>{{ item.used_so_far }}</td>
           <td>{{ item.price|price }}<br>
             {% if item.used_so_far > 0 %}
