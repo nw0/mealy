@@ -8,21 +8,39 @@
 <script type="text/javascript">
   //<![CDATA[
   $(window).load(function(){
+    loaded = false;
+    g_data = null;
+    $('#{{ nisForm.amt_dummy.auto_id }}').attr('disabled', true);
     $('#{{ nisForm.std_inst.auto_id }}').on('change', function(e){
+      $('#{{ nisForm.amt_dummy.auto_id }}').attr('disabled', true);
       if ($(this).val()){
         $.get(  "{% url 'mealy:std_inst_raw' %}?id=" + $(this).val(),
                 function(data){
-                  data = jQuery.parseJSON(data)
+                  g_data = jQuery.parseJSON(data);
+                  loaded = true;
                   document.getElementById("item_desc").textContent =
-                    data.inst_name + " " + data.orig_amt + " " + data.orig_units
-                     + " (" + data.inst_type + ")";
-                  $('#{{ nisForm.price.auto_id }}').val(data.usual_price)
+                    g_data.inst_name + " " + g_data.orig_amt + " " + g_data.orig_units
+                     + " (" + g_data.inst_type + ")";
+                  $('#{{ nisForm.price.auto_id }}').val(g_data.usual_price);
+                  $('#{{ nisForm.price.auto_id }}').change();
+                  $('#{{ nisForm.amt_dummy.auto_id }}').val(g_data.orig_amt);
                 });
       } else {
         document.getElementById("item_desc").textContent = "(select an item)";
-        $('#{{ nisForm.price.auto_id }}').val(0)
+        $('#{{ nisForm.price.auto_id }}').val(0);
+        $('#{{ nisForm.amt_dummy.auto_id }}').val(0);
+        loaded = false;
       }
       e.preventDefault();
+    });
+    $('#{{ nisForm.price.auto_id }}').on('change', function(e){
+      if (loaded && g_data.is_rel) {
+        $('#{{ nisForm.amt_dummy.auto_id }}').val( Math.round(
+          g_data.orig_amt / g_data.usual_price * 100 *
+          $('#{{ nisForm.price.auto_id }}').val() ) / 100
+        );
+        $('#{{ nisForm.amt_dummy.auto_id }}').attr('disabled', false);
+      }
     });
   });//]]>
 </script>
@@ -66,7 +84,7 @@
           <td><a href="{% url 'mealy:types_detail' item.res_type.r_name %}"
             >{{ item.res_type.r_name }}</a></td>
           <td><a href="{% url 'mealy:inv_detail' item.id %}">
-            {{ item.res_name }}</a> {{ item.amt_original }}
+            {{ item.res_name }}</a> {{ item.amt_original|floatformat:"-2" }}
             {{ item.orig_unit.shortcode }}</td>
           <td>{{ item.used_so_far }}</td>
           <td>{{ item.price|price }}<br>

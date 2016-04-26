@@ -99,6 +99,9 @@ class NewInstStdForm(forms.ModelForm):
     price           = forms.IntegerField(
                             label           = "Price (pence)",
                             min_value       = 0, )
+    amt_dummy       = forms.FloatField(
+                            label           = "Amount",
+                            required        = False, )
     best_bef_date   = forms.DateTimeField(
                             label           = "Best before",
                             widget          = Html5DateInput(), )
@@ -112,6 +115,7 @@ class NewInstStdForm(forms.ModelForm):
         model       = Resource_Inst
         fields      = [ 'std_inst',
                         'price',
+                        'amt_dummy',
                         'best_bef_date',
                         'purchase_date' ]
 
