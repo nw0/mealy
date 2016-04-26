@@ -7,6 +7,8 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.views import generic
 from django.utils.decorators import method_decorator
 from django.core.exceptions import ValidationError
+from django.db.models import Avg, Value
+from django.db.models.functions import Coalesce
 from .forms import MealForm, DishForm, TicketForm, TicketFormSet, \
                     InstAttribForm, NewInstForm, NewInstStdForm, NewStdInstForm
 import json, datetime, time
@@ -267,13 +269,15 @@ def invent_detail(request, inst_id):
         return HttpResponseRedirect(reverse("mealy:inv_detail", args=[inst.id]))
 
     tickets = Resource_Ticket.objects.filter(resource_inst=inst).order_by('par_dish')
+    similar_insts = Resource_Inst.objects.filter(res_name__iexact=inst.res_name,
+                                                    inst_owner=request.user)
+    similar_att = similar_insts.filter(exhausted=True).aggregate(mean_usage=Coalesce(Avg('used_so_far'), Value(0)), mean_cost=Coalesce(Avg('price'), Value(0)))
     template = loader.get_template("mealy/inv_detail.html")
     contDict =  {   'inst':         inst,
                     'attrib_form':  InstAttribForm,
                     'tickets':      tickets,
-                    'sim_list':    Resource_Inst.objects.filter(
-                                            res_name__iexact=inst.res_name,
-                                            inst_owner=request.user),
+                    'sim_list':     similar_insts,
+                    'sim_att':      similar_att,
                 }
     return HttpResponse(template.render(contDict, request))
 

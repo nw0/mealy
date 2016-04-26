@@ -83,19 +83,18 @@
       <thead>
         <tr>
           <th>&#8470;</th>
-          <th>Type</th>
           <th>Name</th>
           <th>Used</th>
           <th>Price</th>
           <th>Best Bef.</th>
+          <th>Used?</th>
+          <th>per unit</th>
         </tr>
       </thead>
       <tbody>
         {% for item in sim_list %}
         <tr>
           <td>{% if item == inst %}*{% endif %}</td>
-          <td><a href="{% url 'mealy:types_detail' item.res_type.r_name %}"
-            >{{ item.res_type.r_name }}</a></td>
           <td><a href="{% url 'mealy:inv_detail' item.id %}">
             {{ item.res_name }}</a> {{ item.amt_original|floatformat:"-2" }}
             {{ item.orig_unit.shortcode }}</td>
@@ -105,10 +104,17 @@
             {{ item.price|div:item.used_so_far|price }}/u
             {% else %}-{% endif %}</td>
           <td>{{ item.best_bef_date|date:"M j, Y" }}</td>
+          <td>{{ item.exhausted }}</td>
+          <td>{% if item.used_so_far > 0 %}
+            {{ item.amt_original|div:item.used_so_far|floatformat:"-2" }}
+            {{ item.orig_unit.shortcode }}/u{% else %}-{% endif %}</td>
         {% endfor %}
       </tbody>
     </table>
     <p>(*) the current instance</p>
+    <p>{% if sim_att.mean_usage > 0 %}Average usage
+      {{ sim_att.mean_usage|floatformat:"-2" }} units per exhausted instance at
+      {{ sim_att.mean_cost|div:sim_att.mean_usage|price }}/u.{% endif %}</p>
     {% else %}
     <p>No similar items</p>
     {% endif %}
