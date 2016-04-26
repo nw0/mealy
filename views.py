@@ -271,6 +271,9 @@ def invent_detail(request, inst_id):
     contDict =  {   'inst':         inst,
                     'attrib_form':  InstAttribForm,
                     'tickets':      tickets,
+                    'sim_list':    Resource_Inst.objects.filter(
+                                            res_name__iexact=inst.res_name,
+                                            inst_owner=request.user),
                 }
     return HttpResponse(template.render(contDict, request))
 

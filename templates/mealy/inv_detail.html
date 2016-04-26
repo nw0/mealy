@@ -76,6 +76,42 @@
       <input type="submit" value="Delete Instance" />
     </form>
     {% endif %}
+
+    <h4>Similar items</h4>
+    {% if sim_list %}
+    <table class="invent">
+      <thead>
+        <tr>
+          <th>&#8470;</th>
+          <th>Type</th>
+          <th>Name</th>
+          <th>Used</th>
+          <th>Price</th>
+          <th>Best Bef.</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in sim_list %}
+        <tr>
+          <td>{% if item == inst %}*{% endif %}</td>
+          <td><a href="{% url 'mealy:types_detail' item.res_type.r_name %}"
+            >{{ item.res_type.r_name }}</a></td>
+          <td><a href="{% url 'mealy:inv_detail' item.id %}">
+            {{ item.res_name }}</a> {{ item.amt_original|floatformat:"-2" }}
+            {{ item.orig_unit.shortcode }}</td>
+          <td>{{ item.used_so_far }}</td>
+          <td>{{ item.price|price }}<br>
+            {% if item.used_so_far > 0 %}
+            {{ item.price|div:item.used_so_far|price }}/u
+            {% else %}-{% endif %}</td>
+          <td>{{ item.best_bef_date|date:"M j, Y" }}</td>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p>(*) the current instance</p>
+    {% else %}
+    <p>No similar items</p>
+    {% endif %}
   </div>
 </div>
 {% endblock %}
