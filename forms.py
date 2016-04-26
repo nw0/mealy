@@ -151,6 +151,7 @@ class NewStdInstForm(forms.ModelForm):
                         'usual_price',
                         'use_formal',
                         'use_bestbef',
+                        'is_relative',
                         'orig_unit',
                         'orig_amt' ]
 

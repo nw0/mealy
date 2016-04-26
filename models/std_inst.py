@@ -11,6 +11,7 @@ class Standard_Inst(models.Model):
     use_formal  = models.BooleanField(default=False)
     use_bestbef = models.BooleanField(default=True)
     orig_unit   = models.ForeignKey(Unit)
+    is_relative = models.BooleanField(default=False)
     orig_amt    = models.FloatField()
 
     def show_fields(self):
@@ -19,6 +20,7 @@ class Standard_Inst(models.Model):
                             'usual_price':  self.usual_price,
                             'orig_amt':     self.orig_amt,
                             'orig_units':   self.orig_unit.__str__(),
+                            'is_rel':       self.is_relative,
                             })
 
     def __str__(self):
