@@ -96,6 +96,11 @@ urlpatterns = [
             name="inv_new"
         ),
 
+    url (   r'^instances/new/$',
+            views.NewStdInst.as_view(),
+            name="std_inst_new"
+        ),
+
     url (   r'^inventory/new_std/$',
             views.NewInstStd.as_view(),
             name="inv_new_std"

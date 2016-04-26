@@ -1,4 +1,5 @@
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required, user_passes_test, \
+                                            permission_required
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import loader
@@ -7,7 +8,7 @@ from django.views import generic
 from django.utils.decorators import method_decorator
 from django.core.exceptions import ValidationError
 from .forms import MealForm, DishForm, TicketForm, TicketFormSet, \
-                    InstAttribForm, NewInstForm, NewInstStdForm
+                    InstAttribForm, NewInstForm, NewInstStdForm, NewStdInstForm
 import json, datetime, time
 
 from .models import Resource_Type, Resource_Inst, Resource_Ticket, \
@@ -191,9 +192,22 @@ class TypesView(generic.DetailView):
 class StdInstListView(generic.ListView):
     queryset            = Standard_Inst.objects.order_by('inst_type')
 
+    def get_context_data(self, **kwargs):
+        context = super(StdInstListView, self).get_context_data(**kwargs)
+        context['nsiForm']  = NewStdInstForm
+        return context
+
 @method_decorator(decs, name='dispatch')
 class StdInstDetailView(generic.DetailView):
     queryset            = Standard_Inst.objects.all()
+
+@method_decorator(decs + [permission_required('mealy.can_add_standard_resource_instance')], name='dispatch')
+class NewStdInst(generic.edit.CreateView):
+    form_class  = NewStdInstForm
+    success_url = reverse_lazy("mealy:std_insts")
+
+    def form_invalid(self, form):
+        raise ValidationError("Invalid form value", code='invalid')
 
 @method_decorator(decs, name='dispatch')
 class InventView(generic.ListView):
@@ -208,7 +222,7 @@ class InventView(generic.ListView):
         context['types']    = Resource_Type.objects.all()
         context['showAll']  = self.kwargs['showAll']
         context['niForm']   = NewInstForm
-        context['nisForm']  = NewInstStdForm(auto_id='newstdinstform_%s')
+        context['nisForm']  = NewInstStdForm(auto_id='newinststdform_%s')
         return context
 
 @method_decorator(decs, name='dispatch')
