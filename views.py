@@ -270,7 +270,7 @@ def invent_detail(request, inst_id):
 
     tickets = Resource_Ticket.objects.filter(resource_inst=inst).order_by('par_dish')
     similar_insts = Resource_Inst.objects.filter(res_name__iexact=inst.res_name,
-                                                    inst_owner=request.user)
+                            inst_owner=request.user).order_by('purchase_date')
     similar_att = similar_insts.filter(exhausted=True).aggregate(mean_usage=Coalesce(Avg('used_so_far'), Value(0)), mean_cost=Coalesce(Avg('price'), Value(0)))
     template = loader.get_template("mealy/inv_detail.html")
     contDict =  {   'inst':         inst,

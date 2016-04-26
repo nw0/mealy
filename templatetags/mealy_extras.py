@@ -14,14 +14,14 @@ def price(pr, p2 = False):
     if p2 is False:
         if pr < 100:
             return "%.2gp" % pr
-        return "£%.2f" % (pr/100)
+        return "£%.2f" % (pr/100.)
 
     if not isinstance(p2, Number):
         raise TypeError("Price must be a number")
 
     if pr < 100 and p2 < 100:
         return "%.2gp + %.2gp" % (pr, p2)
-    return "£%.2f + £%.2f" % (pr/100, p2/100)
+    return "£%.2f + £%.2f" % (pr/100., p2/100.)
 
 @register.filter
 def dish_pretty(dish):
