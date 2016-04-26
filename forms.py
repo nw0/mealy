@@ -115,6 +115,45 @@ class NewInstStdForm(forms.ModelForm):
                         'best_bef_date',
                         'purchase_date' ]
 
+class NewStdInstForm(forms.ModelForm):
+    #   New standard instances
+    inst_name       = forms.CharField(
+                            label           = "Instance name",
+                            max_length      = 40, )
+    inst_type       = forms.ModelChoiceField(
+                            label           = "Type",
+                            queryset        = Resource_Type.objects.all(),
+                            widget          = DatalistWidget,
+                            to_field_name   = 'r_name', )
+    usual_price     = forms.IntegerField(
+                            label           = "Usual price (pence)",
+                            min_value       = 0, )
+    use_formal      = forms.BooleanField(
+                            label           = "Use formal units",
+                            required        = False, )
+    use_bestbef     = forms.BooleanField(
+                            label           = "Expiry type",
+                            widget          = forms.RadioSelect(choices=
+                                                [   (True, 'Best Before'),
+                                                    (False, 'Expiry') ] ),
+                            initial         = True, )
+    orig_unit       = forms.ModelChoiceField(
+                            label           = "Units",
+                            queryset        = Unit.objects.all(), )
+    orig_amt        = forms.FloatField(
+                            label           = "Quantity",
+                            min_value       = 0, )
+
+    class Meta:
+        model       = Standard_Inst
+        fields      = [ 'inst_name',
+                        'inst_type',
+                        'usual_price',
+                        'use_formal',
+                        'use_bestbef',
+                        'orig_unit',
+                        'orig_amt' ]
+
 class TicketForm(forms.Form):
     resource_inst   = forms.ModelChoiceField(
                             queryset = Resource_Inst.objects.all())
