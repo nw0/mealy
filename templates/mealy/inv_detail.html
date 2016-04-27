@@ -112,11 +112,23 @@
       </tbody>
     </table>
     <p>(*) the current instance</p>
-    <p>{% if sim_att.tot_usage > 0 %}Total usage of
-      {{ sim_att.tot_usage|floatformat:"-2" }} units for
+    {% if sim_att.tot_usage > 0 %}
+    <h5>Statistics</h5>
+    <p>Total usage of {{ sim_att.tot_usage|floatformat:"-2" }} units for
       {{ sim_att.tot_cost|div:sim_att.tot_usage|price }} per
       {{ sim_att.tot_vol|div:sim_att.tot_usage|floatformat:"-2" }}
-      {{ inst.orig_unit.shortcode }} unit.{% endif %}</p>
+      {{ inst.orig_unit.shortcode }} unit.</p>
+
+    {% with m_use=inst.amt_original|mul:sim_att.tot_usage|div:sim_att.tot_vol %}
+    <p>Based on past history, a {{ inst.amt_original|floatformat:"-2" }}
+      {{ inst.orig_unit.shortcode }} item should last
+      {{ m_use|floatformat:"-2" }} uses. Hence this instance has
+      {{ m_use|sub:inst.used_so_far|floatformat:"-2" }} remaining uses, and we
+      have used approximately
+      {{ inst.amt_original|mul:inst.used_so_far|div:m_use|floatformat:"-2" }}
+      {{ inst.orig_unit.shortcode }} of it so far.</p>
+    {% endwith %}
+    {% endif %}
     {% else %}
     <p>No similar items</p>
     {% endif %}
