@@ -112,9 +112,11 @@
       </tbody>
     </table>
     <p>(*) the current instance</p>
-    <p>{% if sim_att.mean_usage > 0 %}Average usage
-      {{ sim_att.mean_usage|floatformat:"-2" }} units per exhausted instance at
-      {{ sim_att.mean_cost|div:sim_att.mean_usage|price }}/u.{% endif %}</p>
+    <p>{% if sim_att.tot_usage > 0 %}Total usage of
+      {{ sim_att.tot_usage|floatformat:"-2" }} units for
+      {{ sim_att.tot_cost|div:sim_att.tot_usage|price }} per
+      {{ sim_att.tot_vol|div:sim_att.tot_usage|floatformat:"-2" }}
+      {{ inst.orig_unit.shortcode }} unit.{% endif %}</p>
     {% else %}
     <p>No similar items</p>
     {% endif %}
