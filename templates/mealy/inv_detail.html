@@ -39,6 +39,13 @@
       {{ price_form.as_p }}
       <input type="submit" />
     </form>
+
+    <form action="{% url 'mealy:inv_detail' inst.id %}" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="formtype" value="amtchange" />
+      {{ amt_form.as_p }}
+      <input type="submit" />
+    </form>
   </div>
 
   <div class="eight columns">

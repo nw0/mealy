@@ -176,3 +176,6 @@ TicketFormSet = formset_factory(TicketForm, extra=2)
 
 class InstPriceForm(forms.Form):
     price   = forms.IntegerField(min_value=0)
+
+class InstAmtForm(forms.Form):
+    orig_amt    = forms.FloatField(min_value=0)

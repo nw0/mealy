@@ -75,6 +75,11 @@ class Resource_Inst(models.Model):
         self.refresh_dependent_ticket_prices()
         self.save()
 
+    def change_amt(self, newAmt):
+        self.amt_original = newAmt
+        print "%f %d" % (newAmt, self.id)
+        self.save()
+
     def refresh_dependent_ticket_prices(self):
         was_finalised = self.exhausted
         self.definalise()

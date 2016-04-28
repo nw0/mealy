@@ -10,7 +10,8 @@ from django.core.exceptions import ValidationError
 from django.db.models import Avg, Value, Sum, Count
 from django.db.models.functions import Coalesce
 from .forms import MealForm, DishForm, TicketForm, TicketFormSet, \
-                    InstPriceForm, NewInstForm, NewInstStdForm, NewStdInstForm
+                    InstAmtForm, InstPriceForm, \
+                    NewInstForm, NewInstStdForm, NewStdInstForm
 import json, datetime, time
 
 from .models import Resource_Type, Resource_Inst, Resource_Ticket, \
@@ -264,6 +265,9 @@ def invent_detail(request, inst_id):
             inst.change_price(newPrice)
             if initf:
                 inst.finalise()
+        elif formType == "amtchange":
+            newAmt = float(request.POST['orig_amt'])
+            inst.change_amt(newAmt)
         else:
             raise Http404("We're not sure what form you submitted")
         return HttpResponseRedirect(reverse("mealy:inv_detail", args=[inst.id]))
@@ -279,6 +283,7 @@ def invent_detail(request, inst_id):
     template = loader.get_template("mealy/inv_detail.html")
     contDict =  {   'inst':         inst,
                     'price_form':   InstPriceForm,
+                    'amt_form':     InstAmtForm,
                     'tickets':      tickets,
                     'sim_list':     similar_insts,
                     'sim_att':      similar_att,
