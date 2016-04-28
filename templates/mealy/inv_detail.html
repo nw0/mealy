@@ -35,8 +35,8 @@
     <h4>Change attributes</h4>
     <form action="{% url 'mealy:inv_detail' inst.id %}" method="post">
       {% csrf_token %}
-      <input type="hidden" name="formtype" value="attribchange" />
-      {{ attrib_form.as_p }}
+      <input type="hidden" name="formtype" value="pricechange" />
+      {{ price_form.as_p }}
       <input type="submit" />
     </form>
   </div>

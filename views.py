@@ -10,7 +10,7 @@ from django.core.exceptions import ValidationError
 from django.db.models import Avg, Value, Sum, Count
 from django.db.models.functions import Coalesce
 from .forms import MealForm, DishForm, TicketForm, TicketFormSet, \
-                    InstAttribForm, NewInstForm, NewInstStdForm, NewStdInstForm
+                    InstPriceForm, NewInstForm, NewInstStdForm, NewStdInstForm
 import json, datetime, time
 
 from .models import Resource_Type, Resource_Inst, Resource_Ticket, \
@@ -256,7 +256,7 @@ def invent_detail(request, inst_id):
                 inst.definalise()
             else:
                 raise Http404("Finalisation invalid")
-        elif formType == "attribchange":
+        elif formType == "pricechange":
             initf = inst.exhausted
             if initf:
                 inst.definalise()
@@ -278,7 +278,7 @@ def invent_detail(request, inst_id):
                         ct=Count('id'),)
     template = loader.get_template("mealy/inv_detail.html")
     contDict =  {   'inst':         inst,
-                    'attrib_form':  InstAttribForm,
+                    'price_form':   InstPriceForm,
                     'tickets':      tickets,
                     'sim_list':     similar_insts,
                     'sim_att':      similar_att,

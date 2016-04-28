@@ -174,5 +174,5 @@ class TicketForm(forms.Form):
 
 TicketFormSet = formset_factory(TicketForm, extra=2)
 
-class InstAttribForm(forms.Form):
+class InstPriceForm(forms.Form):
     price   = forms.IntegerField(min_value=0)
