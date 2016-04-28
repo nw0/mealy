@@ -274,7 +274,7 @@ def invent_detail(request, inst_id):
 
     tickets = Resource_Ticket.objects.filter(resource_inst=inst).order_by('par_dish')
     similar_insts = Resource_Inst.objects.filter(res_name__iexact=inst.res_name,
-                            inst_owner=request.user).order_by('purchase_date')
+                        inst_owner=request.user).order_by('purchase_date', 'id')
     similar_att = similar_insts.filter(exhausted=True).aggregate(
                         tot_usage=Coalesce(Sum('used_so_far'), Value(0)),
                         tot_cost=Coalesce(Sum('price'), Value(0)),

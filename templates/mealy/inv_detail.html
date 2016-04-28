@@ -126,6 +126,7 @@
       {{ sim_att.tot_vol|div:sim_att.tot_usage|floatformat:"-2" }}
       {{ inst.orig_unit.shortcode }} unit.</p>
 
+    {% if not inst.exhausted %}
     {% with m_use=inst.amt_original|mul:sim_att.tot_usage|div:sim_att.tot_vol %}
     <p>Based on past history, a {{ inst.amt_original|floatformat:"-2" }}
       {{ inst.orig_unit.shortcode }} item should last
@@ -135,6 +136,7 @@
       {{ inst.amt_original|mul:inst.used_so_far|div:m_use|floatformat:"-2" }}
       {{ inst.orig_unit.shortcode }} of it so far.</p>
     {% endwith %}
+    {% endif %}
     {% endif %}
     {% else %}
     <p>No similar items</p>
