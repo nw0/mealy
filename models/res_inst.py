@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Avg, Value, Sum, Count
+from django.db.models.functions import Coalesce
 
 from res_type import Resource_Type
 
@@ -90,6 +92,21 @@ class Resource_Inst(models.Model):
                 self.price * ticket.used_on_ticket / self.used_so_far)
 
         self.set_finalisation(was_finalised)
+
+    def similar_set(self, user):
+        return Resource_Inst.objects.filter(res_name__iexact=self.res_name,
+                        inst_owner=user).order_by('purchase_date', 'id')
+
+    def similar_attrs(self, user):
+        return self.similar_set(user).filter(exhausted=True).aggregate(
+                        tot_usage=Coalesce(Sum('used_so_far'), Value(0)),
+                        tot_cost=Coalesce(Sum('price'), Value(0)),
+                        tot_vol=Coalesce(Sum('amt_original'), Value(0)),
+                        ct=Count('id'), )
+
+    def single_unit_vol(self, user):
+        att = self.similar_attrs(user)
+        return 0 if att['tot_usage'] == 0 else att['tot_vol'] / att['tot_usage']
 
     def __str__(self):
         return self.res_name + " (" + str(self.id) + ")"
