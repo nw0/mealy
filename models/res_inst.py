@@ -93,19 +93,19 @@ class Resource_Inst(models.Model):
 
         self.set_finalisation(was_finalised)
 
-    def similar_set(self, user):
+    def similar_set(self):
         return Resource_Inst.objects.filter(res_name__iexact=self.res_name,
-                        inst_owner=user).order_by('purchase_date', 'id')
+                    inst_owner=self.inst_owner).order_by('purchase_date', 'id')
 
-    def similar_attrs(self, user):
-        return self.similar_set(user).filter(exhausted=True).aggregate(
+    def similar_attrs(self):
+        return self.similar_set().filter(exhausted=True).aggregate(
                         tot_usage=Coalesce(Sum('used_so_far'), Value(0)),
                         tot_cost=Coalesce(Sum('price'), Value(0)),
                         tot_vol=Coalesce(Sum('amt_original'), Value(0)),
                         ct=Count('id'), )
 
-    def single_unit_vol(self, user):
-        att = self.similar_attrs(user)
+    def single_unit_vol(self):
+        att = self.similar_attrs()
         return 0 if att['tot_usage'] == 0 else att['tot_vol'] / att['tot_usage']
 
     def __str__(self):

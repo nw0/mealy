@@ -273,8 +273,8 @@ def invent_detail(request, inst_id):
         return HttpResponseRedirect(reverse("mealy:inv_detail", args=[inst.id]))
 
     tickets = Resource_Ticket.objects.filter(resource_inst=inst).order_by('par_dish')
-    similar_insts = inst.similar_set(request.user)
-    similar_att = inst.similar_attrs(request.user)
+    similar_insts = inst.similar_set()
+    similar_att = inst.similar_attrs()
     template = loader.get_template("mealy/inv_detail.html")
     contDict =  {   'inst':         inst,
                     'price_form':   InstPriceForm,
