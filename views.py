@@ -329,7 +329,6 @@ class NewInstStd(generic.edit.CreateView):
         form.instance.amt_original      = form.cleaned_data['std_inst'].orig_amt
         form.instance.best_before       = form.cleaned_data['std_inst'].use_bestbef
         if form.cleaned_data['std_inst'].is_relative:
-            print form.cleaned_data['amt_dummy']
             form.instance.amt_original  = form.cleaned_data['amt_dummy']
         return super(NewInstStd, self).form_valid(form)
 

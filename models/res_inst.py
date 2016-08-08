@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models import Avg, Value, Sum, Count
 from django.db.models.functions import Coalesce
 
-from res_type import Resource_Type
+from .res_type import Resource_Type
 
 class Unit(models.Model):
     shortcode       = models.CharField(max_length=8)
@@ -79,7 +79,6 @@ class Resource_Inst(models.Model):
 
     def change_amt(self, newAmt):
         self.amt_original = newAmt
-        print "%f %d" % (newAmt, self.id)
         self.save()
 
     def refresh_dependent_ticket_prices(self):

@@ -1,8 +1,8 @@
 from django.db import models
 import json
 
-from res_type import Resource_Type
-from res_inst import Unit
+from .res_type import Resource_Type
+from .res_inst import Unit
 
 class Standard_Inst(models.Model):
     inst_name   = models.CharField(max_length=40)

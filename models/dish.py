@@ -3,7 +3,7 @@ from django.db.models import Sum, Value
 from django.db.models.functions import Coalesce
 from django.contrib.auth.models import User
 
-from meal import Meal
+from .meal import Meal
 
 class Dish(models.Model):
     COOKING_STYLES = (

@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models import signals
 
-from res_inst import Resource_Inst
-from dish import Dish
+from .res_inst import Resource_Inst
+from .dish import Dish
 
 class TicketManager(models.Manager):
     def create_ticket(self, resource_inst, used_on_ticket, dish,
