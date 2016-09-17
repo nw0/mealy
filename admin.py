@@ -27,4 +27,5 @@ class StandardInstAdmin(admin.ModelAdmin):
 def other_checks(user):
     #   Use this function for checks which the user must pass to use Mealy
     #   If there are none, simply return True
-    return user.groups.filter(name="Mealy Users")
+    # return user.groups.filter(name="Mealy Users")
+    return True
