@@ -13,19 +13,6 @@ from .models import Resource_Type, Resource_Inst, Meal, Dish, Standard_Inst, \
 class Html5DateInput(forms.DateInput):
     input_type = 'date'
 
-class DatalistWidget(forms.Select):
-    def render(self, name, value, attrs=None, choices=()):
-        if value is None:
-            value = ''
-        final_attrs = self.build_attrs(attrs, name=name)
-        output = [  format_html( '<input type="text"{} list="{}">',
-                                flatatt(final_attrs), name),
-                    format_html('<datalist name="{}" id="{}">', name, name), ]
-        options = self.render_options(choices, [value])
-        if options:
-            output.append(options)
-        output.append('</datalist>')
-        return mark_safe('\n'.join(output))
 
 class MealForm(forms.ModelForm):
     cons_time       = forms.DateTimeField(
@@ -58,7 +45,6 @@ class NewInstForm(forms.ModelForm):
     res_type        = forms.ModelChoiceField(
                             label           = "Type",
                             queryset        = Resource_Type.objects.all(),
-                            widget          = DatalistWidget,
                             to_field_name   = 'r_name', )
     price           = forms.IntegerField(
                             label           = "Price (pence)",
@@ -127,7 +113,6 @@ class NewStdInstForm(forms.ModelForm):
     inst_type       = forms.ModelChoiceField(
                             label           = "Type",
                             queryset        = Resource_Type.objects.all(),
-                            widget          = DatalistWidget,
                             to_field_name   = 'r_name', )
     usual_price     = forms.IntegerField(
                             label           = "Usual price (pence)",
